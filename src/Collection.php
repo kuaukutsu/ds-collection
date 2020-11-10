@@ -27,12 +27,12 @@ abstract class Collection implements PhpDsCollection
 
     /**
      * Collection constructor.
-     * @param mixed ...$items
+     * @param object ...$items
      */
     public function __construct(...$items)
     {
         foreach ($items as $item) {
-            $this->add($item);
+            $this->attach($item);
         }
     }
 
@@ -40,25 +40,52 @@ abstract class Collection implements PhpDsCollection
      * Adds an object in the storage
      * @param object $object The object to add.
      * @return void
+     * @throws CollectionTypeException
      */
-    public function add(object $object): void
+    public function attach(object $object): void
     {
         if (is_a($object, $this->getType())) {
-            $this->items[] = $object;
+            $this->items[spl_object_hash($object)] ??= $object;
             return;
         }
 
         throw new CollectionTypeException('The collection item must be an instance of type ' . ucfirst($this->getType()));
     }
 
-    public function clear(): void
+    /**
+     * Removes an object from the storage.
+     * @param object $object
+     */
+    public function detach(object $object): void
     {
-        $this->items = [];
+        unset($this->items[spl_object_hash($object)]);
     }
 
+    /**
+     * Checks if the storage contains a specific object.
+     * @param object $object
+     * @return bool
+     */
+    public function contains(object $object): bool
+    {
+        return array_key_exists(spl_object_hash($object), $this->items);
+    }
+
+    /**
+     * Returns the number of objects in the storage.
+     * @return int
+     */
     public function count() : int
     {
         return count($this->items);
+    }
+
+    /**
+     * Removes objects from the current storage.
+     */
+    public function clear(): void
+    {
+        $this->items = [];
     }
 
     public function getIterator(): ArrayIterator
@@ -68,6 +95,6 @@ abstract class Collection implements PhpDsCollection
 
     public function toArray() : array
     {
-        return $this->items;
+        return array_values($this->items);
     }
 }

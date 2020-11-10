@@ -40,5 +40,10 @@
                 <directory name="tests" />
             </errorLevel>
         </MixedInferredReturnType>
+        <MissingThrowsDocblock>
+            <errorLevel type="suppress">
+                <directory name="tests" />
+            </errorLevel>
+        </MissingThrowsDocblock>
     </issueHandlers>
 </psalm>
