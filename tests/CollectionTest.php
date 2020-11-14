@@ -45,6 +45,30 @@ class CollectionTest extends TestCase
         }
     }
 
+    public function testCollectionMerge(): void
+    {
+        $collection = new DtoCollection();
+        $collection->attach(new Dto(1, 'first'));
+        $collection->attach(new Dto(2, 'second'));
+
+        $collectionSecond = new DtoCollection(new Dto(3, 'merge'));
+
+        $collection->merge($collectionSecond);
+
+        self::assertCount(3, $collection);
+
+        /**
+         * @var Dto $c1
+         * @var Dto $c2
+         * @var Dto $c3
+         */
+        [$c1, $c2, $c3] = $collection->toArray();
+
+        self::assertEquals(1, $c1->id);
+        self::assertEquals(2, $c2->id);
+        self::assertEquals(3, $c3->id);
+    }
+
     public function testCollectionOperations(): void
     {
         $object = new Dto(3, 'third');

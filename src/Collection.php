@@ -53,6 +53,18 @@ abstract class Collection implements PhpDsCollection
     }
 
     /**
+     * Adds all objects from another storage
+     * @param Collection $collection
+     */
+    public function merge(self $collection): void
+    {
+        /** @var object $item */
+        foreach ($collection as $item) {
+            $this->attach($item);
+        }
+    }
+
+    /**
      * Removes an object from the storage.
      * @param object $object
      */
