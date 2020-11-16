@@ -69,6 +69,29 @@ class CollectionTest extends TestCase
         self::assertEquals(3, $c3->id);
     }
 
+    public function testCollectionFilter(): void
+    {
+        $collection = new DtoCollection();
+        $collection->attach(new Dto(1, 'test'));
+        $collection->attach(new Dto(2, 'second'));
+        $collection->attach(new Dto(3, 'test'));
+
+        $collectionNew = $collection->filter(static function (Dto $dto): bool {
+           return $dto->name === 'test';
+        });
+
+        self::assertCount(2, $collectionNew);
+
+        /**
+         * @var Dto $c1
+         * @var Dto $c2
+         */
+        [$c1, $c2] = $collectionNew->toArray();
+
+        self::assertEquals(1, $c1->id);
+        self::assertEquals(3, $c2->id);
+    }
+
     public function testCollectionOperations(): void
     {
         $object = new Dto(3, 'third');

@@ -84,6 +84,26 @@ abstract class Collection implements PhpDsCollection
     }
 
     /**
+     * Filters elements of an array using a callback function.
+     * @param callable(mixed):bool $callback
+     * @example
+     * ```php
+     * function(object $object): bool {
+     *  return get_class($object) === $this->getType();
+     * }
+     * ```
+     *
+     * @return $this
+     */
+    public function filter(callable $callback): self
+    {
+        $new = clone $this;
+        $new->items = array_filter($this->items, $callback);
+
+        return $new;
+    }
+
+    /**
      * Returns the number of objects in the storage.
      * @return int
      */
