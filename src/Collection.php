@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace kuaukutsu\ds\collection;
 
 use ArrayIterator;
-use Ds\Collection as PhpDsCollection;
 use Ds\Traits\GenericCollection;
 
 /**
@@ -12,7 +11,7 @@ use Ds\Traits\GenericCollection;
  *
  * @see https://www.php.net/manual/class.ds-collection.php
  */
-abstract class Collection implements PhpDsCollection
+abstract class Collection implements CollectionInterface
 {
     use GenericCollection;
 
@@ -54,9 +53,9 @@ abstract class Collection implements PhpDsCollection
 
     /**
      * Adds all objects from another storage
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      */
-    public function merge(self $collection): void
+    public function merge(CollectionInterface $collection): void
     {
         /** @var object $item */
         foreach ($collection as $item) {
