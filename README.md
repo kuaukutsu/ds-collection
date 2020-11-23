@@ -1,5 +1,22 @@
 # Data structure Collection
 
+```php
+$collection = new DtoCollection();
+$collection->attach(new Dto(1, 'first'));
+$collection->attach(new Dto(2, 'second'));
+
+$collectionOther = new DtoCollection();
+$collectionOther->attach(new Dto(3, 'third'));
+$collectionOther->attach(new Dto(4, 'fourth'));
+
+$collection->merge($collectionOther);
+
+$collection->filter(static function (Dto $dto): bool {
+    return $dto->id > 2; 
+})
+
+```
+
 ## Testing
 
 ### Unit testing

@@ -3,6 +3,8 @@
 namespace kuaukutsu\ds\collection\tests;
 
 use kuaukutsu\ds\collection\CollectionTypeException;
+use kuaukutsu\ds\collection\tests\stub\Dto;
+use kuaukutsu\ds\collection\tests\stub\DtoCollection;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
