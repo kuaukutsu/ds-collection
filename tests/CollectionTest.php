@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace kuaukutsu\ds\collection\tests;
 
+use stdClass;
+use PHPUnit\Framework\TestCase;
 use kuaukutsu\ds\collection\CollectionTypeException;
 use kuaukutsu\ds\collection\tests\stub\Dto;
 use kuaukutsu\ds\collection\tests\stub\DtoCollection;
-use PHPUnit\Framework\TestCase;
-use stdClass;
 
-class CollectionTest extends TestCase
+final class CollectionTest extends TestCase
 {
     public function testCollectionConstruct(): void
     {

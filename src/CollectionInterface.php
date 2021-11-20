@@ -21,26 +21,26 @@ interface CollectionInterface extends PhpDsCollection
     /**
      * Adds an object in the storage.
      *
-     * @param T|object $object The object to add.
+     * @param T|object $item The object to add.
      * @return void
      * @throws CollectionTypeException
      */
-    public function attach(object $object): void;
+    public function attach(object $item): void;
 
     /**
      * Removes an object from the storage.
      *
-     * @param T|object $object
+     * @param T|object $item
      */
-    public function detach(object $object): void;
+    public function detach(object $item): void;
 
     /**
      * Checks if the storage contains a specific object.
      *
-     * @param T|object $object
+     * @param T|object $item
      * @return bool
      */
-    public function contains(object $object): bool;
+    public function contains(object $item): bool;
 
     /**
      * Adds all objects from another storage.
@@ -55,11 +55,18 @@ interface CollectionInterface extends PhpDsCollection
      * @return static
      * @example
      * ```php
-     * function(object $object): bool {
-     *  return get_class($object) === $this->getType();
+     * function(object $item): bool {
+     *  return get_class($item) === $this->getType();
      * }
      * ```
      *
      */
     public function filter(callable $callback): self;
+
+    /**
+     * Returns objects by index key.
+     * @param string|int $indexKey
+     * @return T|object|null
+     */
+    public function get($indexKey): ?object;
 }
