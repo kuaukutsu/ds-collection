@@ -30,7 +30,7 @@ abstract class Collection implements CollectionInterface
     /**
      * @param T ...$items
      */
-    public function __construct(...$items)
+    final public function __construct(...$items)
     {
         foreach ($items as $item) {
             $this->attach($item);
