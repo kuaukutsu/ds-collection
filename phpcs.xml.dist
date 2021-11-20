@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="PSR12">
+    <description>The PSR12 coding standard.</description>
+
+    <file>src</file>
+    <file>tests</file>
+
+    <!-- Show progression -->
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php" />
+    <arg name="colors"/>
+    <arg value="p"/>
+
+    <rule ref="PSR12"/>
+
+</ruleset>

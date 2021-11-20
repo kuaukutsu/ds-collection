@@ -1,15 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection;
 
 use ArrayIterator;
+use Traversable;
 use Ds\Traits\GenericCollection;
 
 /**
  * Class Collection
  *
  * @see https://www.php.net/manual/class.ds-collection.php
+ * @template T of object
  */
 abstract class Collection implements CollectionInterface
 {
@@ -20,13 +23,12 @@ abstract class Collection implements CollectionInterface
     /**
      * Type object, get_class($item)
      *
-     * @return string
+     * @return class-string<T>
      */
     abstract protected function getType(): string;
 
     /**
-     * Collection constructor.
-     * @param object ...$items
+     * @param T ...$items
      */
     public function __construct(...$items)
     {
@@ -37,27 +39,29 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Adds an object in the storage
-     * @param object $object The object to add.
+     * @param T|object $object The object to add.
      * @return void
      * @throws CollectionTypeException
      */
-    public function attach(object $object): void
+    final public function attach(object $object): void
     {
         if (is_a($object, $this->getType())) {
             $this->items[spl_object_hash($object)] ??= $object;
             return;
         }
 
-        throw new CollectionTypeException('The collection item must be an instance of type ' . ucfirst($this->getType()));
+        throw new CollectionTypeException(
+            'The collection item must be an instance of type ' . ucfirst($this->getType())
+        );
     }
 
     /**
      * Adds all objects from another storage
      * @param CollectionInterface $collection
      */
-    public function merge(CollectionInterface $collection): void
+    final public function merge(CollectionInterface $collection): void
     {
-        /** @var object $item */
+        /** @var T $item */
         foreach ($collection as $item) {
             $this->attach($item);
         }
@@ -65,19 +69,19 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Removes an object from the storage.
-     * @param object $object
+     * @param T|object $object
      */
-    public function detach(object $object): void
+    final public function detach(object $object): void
     {
         unset($this->items[spl_object_hash($object)]);
     }
 
     /**
      * Checks if the storage contains a specific object.
-     * @param object $object
+     * @param T|object $object
      * @return bool
      */
-    public function contains(object $object): bool
+    final public function contains(object $object): bool
     {
         return array_key_exists(spl_object_hash($object), $this->items);
     }
@@ -92,9 +96,9 @@ abstract class Collection implements CollectionInterface
      * }
      * ```
      *
-     * @return $this
+     * @return static
      */
-    public function filter(callable $callback): self
+    final public function filter(callable $callback): self
     {
         $new = clone $this;
         $new->items = array_filter($this->items, $callback);
@@ -106,7 +110,7 @@ abstract class Collection implements CollectionInterface
      * Returns the number of objects in the storage.
      * @return int
      */
-    public function count() : int
+    final public function count(): int
     {
         return count($this->items);
     }
@@ -114,17 +118,20 @@ abstract class Collection implements CollectionInterface
     /**
      * Removes objects from the current storage.
      */
-    public function clear(): void
+    final public function clear(): void
     {
         $this->items = [];
     }
 
-    public function getIterator(): ArrayIterator
+    /**
+     * @return Traversable
+     */
+    final public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }
 
-    public function toArray() : array
+    final public function toArray(): array
     {
         return array_values($this->items);
     }

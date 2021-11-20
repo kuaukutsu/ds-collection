@@ -17,6 +17,15 @@ $collection->filter(static function (Dto $dto): bool {
 
 ```
 
+## Docker
+
+local
+
+```shell
+docker build -t kuaukutsu/ds-collection:php .
+docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php sh
+```
+
 ## Testing
 
 ### Unit testing
@@ -28,26 +37,23 @@ The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 ```
 
 local
-```shell
-docker run --init -it --rm -v "$(pwd):/project" -v "$(pwd)/phpqa/tmp:/tmp" -w /project jakzal/phpqa php -d pcov.enabled=1 /tools/phpunit --coverage-clover=coverage.clover --colors=always
-```
-
-### Mutation testing
-
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
 
 ```shell
-./vendor/bin/infection
+docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php ./vendor/bin/phpunit 
 ```
+
+### Code Sniffer
 
 local
+
 ```shell
-docker run --init -it --rm -v "$(pwd):/project" -v "$(pwd)/phpqa/tmp:/tmp" -w /project jakzal/phpqa /tools/infection run --initial-tests-php-options='-dpcov.enabled=1'
+docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php ./vendor/bin/phpcs 
 ```
 
-or
+phpqa
+
 ```shell
-docker run --init -it --rm -v "$(pwd):/project" -v "$(pwd)/phpqa/tmp:/tmp" -w /project jakzal/phpqa ./vendor/bin/roave-infection-static-analysis-plugin run --initial-tests-php-options='-dpcov.enabled=1'
+docker run --init -it --rm -v "$(pwd):/app" -v "$(pwd)/phpqa/tmp:/tmp" -w /app jakzal/phpqa phpcs
 ```
 
 ### Static analysis
@@ -56,4 +62,16 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 
 ```shell
 ./vendor/bin/psalm
+```
+
+local
+
+```shell
+docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php ./vendor/bin/psalm 
+```
+
+phpqa
+
+```shell
+docker run --init -it --rm -v "$(pwd):/app" -v "$(pwd)/phpqa/tmp:/tmp" -w /app jakzal/phpqa psalm
 ```

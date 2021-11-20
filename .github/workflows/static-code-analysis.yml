@@ -1,0 +1,24 @@
+name: Static code analysis
+
+on: [ pull_request ]
+
+jobs:
+  phpcs:
+    name: static code analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup PHP with tools
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          tools: composer:v2, psalm, phpcs
+        env:
+          fail-fast: true
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: composer install --dev --prefer-dist --no-progress --no-suggest
+      - name: Run phpcs
+        run: phpcs
+      - name: Psalm
+        run: vendor/bin/psalm --output-format=github
