@@ -25,7 +25,7 @@ abstract class Collection implements CollectionInterface
      *
      * @return class-string<T>
      */
-    abstract protected function getType(): string;
+    abstract public function getType(): string;
 
     /**
      * @param T ...$items

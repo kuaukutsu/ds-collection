@@ -11,11 +11,7 @@ use kuaukutsu\ds\collection\Collection;
  */
 final class DtoCollection extends Collection
 {
-    /**
-     * @psalm-return class-string
-     * @return string
-     */
-    protected function getType(): string
+    public function getType(): string
     {
         return Dto::class;
     }
