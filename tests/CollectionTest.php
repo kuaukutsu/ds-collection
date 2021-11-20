@@ -79,7 +79,7 @@ class CollectionTest extends TestCase
         $collection->attach(new Dto(3, 'test'));
 
         $collectionNew = $collection->filter(static function (Dto $dto): bool {
-           return $dto->name === 'test';
+            return $dto->name === 'test';
         });
 
         self::assertCount(2, $collectionNew);
