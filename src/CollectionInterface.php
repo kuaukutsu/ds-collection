@@ -65,8 +65,8 @@ interface CollectionInterface extends PhpDsCollection
 
     /**
      * Returns objects by index key.
-     * @param string|int $indexKey
+     * @param string|int ...$indexKey
      * @return T|object|null
      */
-    public function get($indexKey): ?object;
+    public function get(...$indexKey): ?object;
 }

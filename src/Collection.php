@@ -118,12 +118,12 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Returns objects by index key.
-     * @param string|int $indexKey
+     * @param string|int ...$indexKey
      * @return T|object|null
      */
-    final public function get($indexKey): ?object
+    final public function get(...$indexKey): ?object
     {
-        $key = $this->map[$this->buildKey((string)$indexKey)] ?? null;
+        $key = $this->map[$this->buildKey($indexKey)] ?? null;
         if ($key === null) {
             return null;
         }
@@ -163,7 +163,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * @param T|object $item
-     * @return string|int|null
+     * @return string|int|array<scalar>|null
      */
     protected function indexBy(object $item)
     {
@@ -171,7 +171,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * @param string|int|null $index
+     * @param string|int|array<scalar>|null $index
      * @param string $key
      */
     private function mapSet($index, string $key): void
@@ -180,11 +180,11 @@ abstract class Collection implements CollectionInterface
             return;
         }
 
-        $this->map[$this->buildKey((string)$index)] = $key;
+        $this->map[$this->buildKey($index)] = $key;
     }
 
     /**
-     * @param string|int|null $index
+     * @param string|int|array<scalar>|null $index
      */
     private function mapUnset($index): void
     {
@@ -192,11 +192,23 @@ abstract class Collection implements CollectionInterface
             return;
         }
 
-        unset($this->map[$this->buildKey((string)$index)]);
+        unset($this->map[$this->buildKey($index)]);
     }
 
-    private function buildKey(string $index): string
+    /**
+     * @param string|int|array<scalar> $index
+     * @return string
+     */
+    private function buildKey($index): string
     {
+        if (is_array($index)) {
+            $index = implode(':', $index);
+        }
+
+        if (is_numeric($index)) {
+            $index = (string)$index;
+        }
+
         return ctype_alnum($index) && mb_strlen($index, '8bit') <= 32 ? $index : md5($index);
     }
 }

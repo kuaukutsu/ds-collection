@@ -67,6 +67,35 @@ $collection->attach(new Dto(2, 'second'));
 $dto = $collection->get('second');
 ```
 
+#### Составные ключи
+
+Ключ индексирования может быть составным, например:
+
+```php
+/**
+ * @param Dto|object $item
+ * @return array<scalar>
+ */
+protected function indexBy(object $item): array
+{
+    return [(int)$item->id, (string)$item->name];
+}
+```
+
+```php
+$collection = new DtoCollection();
+$collection->attach(new Dto(1, 'first'));
+$collection->attach(new Dto(2, 'second'));
+$collection->attach(new Dto(3, 'third'));
+
+$dto = $collection->get(2, 'second');
+```
+
+## Feature
+
+- php >= 8.0
+- **WeakMap** (https://www.php.net/manual/ru/class.weakmap.php, https://sergeymukhin.com/blog/php-8-weakmaps-slabye-karty)
+
 ## Docker
 
 local
