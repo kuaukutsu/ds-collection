@@ -18,7 +18,15 @@ abstract class Collection implements CollectionInterface
 {
     use GenericCollection;
 
+    /**
+     * @var array<string, T>
+     */
     private array $items = [];
+
+    /**
+     * @var array<string, string>
+     */
+    private array $map = [];
 
     /**
      * Type object, get_class($item)
@@ -39,20 +47,21 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Adds an object in the storage
-     * @param T|object $object The object to add.
+     * @param T|object $item The object to add.
      * @return void
      * @throws CollectionTypeException
      */
-    final public function attach(object $object): void
+    final public function attach(object $item): void
     {
-        if (is_a($object, $this->getType())) {
-            $this->items[spl_object_hash($object)] ??= $object;
-            return;
+        if (is_a($item, $this->getType()) === false) {
+            throw new CollectionTypeException(
+                'The collection item must be an instance of type ' . ucfirst($this->getType())
+            );
         }
 
-        throw new CollectionTypeException(
-            'The collection item must be an instance of type ' . ucfirst($this->getType())
-        );
+        $key = spl_object_hash($item);
+        $this->items[$key] ??= $item;
+        $this->mapSet($this->indexBy($item), $key);
     }
 
     /**
@@ -69,41 +78,57 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Removes an object from the storage.
-     * @param T|object $object
+     * @param T|object $item
      */
-    final public function detach(object $object): void
+    final public function detach(object $item): void
     {
-        unset($this->items[spl_object_hash($object)]);
+        unset($this->items[spl_object_hash($item)]);
+        $this->mapUnset($this->indexBy($item));
     }
 
     /**
      * Checks if the storage contains a specific object.
-     * @param T|object $object
+     * @param T|object $item
      * @return bool
      */
-    final public function contains(object $object): bool
+    final public function contains(object $item): bool
     {
-        return array_key_exists(spl_object_hash($object), $this->items);
+        return array_key_exists(spl_object_hash($item), $this->items);
     }
 
     /**
      * Filters elements of an array using a callback function.
      * @param callable(mixed):bool $callback
+     * @return static
      * @example
      * ```php
-     * function(object $object): bool {
-     *  return get_class($object) === $this->getType();
+     * function(object $item): bool {
+     *  return get_class($item) === $this->getType();
      * }
      * ```
      *
-     * @return static
      */
     final public function filter(callable $callback): self
     {
-        $new = clone $this;
-        $new->items = array_filter($this->items, $callback);
+        $collection = clone $this;
+        $collection->items = array_filter($this->items, $callback);
 
-        return $new;
+        return $collection;
+    }
+
+    /**
+     * Returns objects by index key.
+     * @param string|int $indexKey
+     * @return T|object|null
+     */
+    final public function get($indexKey): ?object
+    {
+        $key = $this->map[$this->buildKey((string)$indexKey)] ?? null;
+        if ($key === null) {
+            return null;
+        }
+
+        return $this->items[$key] ?? null;
     }
 
     /**
@@ -134,5 +159,44 @@ abstract class Collection implements CollectionInterface
     final public function toArray(): array
     {
         return array_values($this->items);
+    }
+
+    /**
+     * @param T|object $item
+     * @return string|int|null
+     */
+    protected function indexBy(object $item)
+    {
+        return null;
+    }
+
+    /**
+     * @param string|int|null $index
+     * @param string $key
+     */
+    private function mapSet($index, string $key): void
+    {
+        if (empty($index)) {
+            return;
+        }
+
+        $this->map[$this->buildKey((string)$index)] = $key;
+    }
+
+    /**
+     * @param string|int|null $index
+     */
+    private function mapUnset($index): void
+    {
+        if (empty($index)) {
+            return;
+        }
+
+        unset($this->map[$this->buildKey((string)$index)]);
+    }
+
+    private function buildKey(string $index): string
+    {
+        return ctype_alnum($index) && mb_strlen($index, '8bit') <= 32 ? $index : md5($index);
     }
 }

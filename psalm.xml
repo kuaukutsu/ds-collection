@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-    checkForThrowsDocblock="true"
+    checkForThrowsDocblock="false"
     checkForThrowsInGlobalScope="true"
     ensureArrayStringOffsetsExist="true"
     errorLevel="1"
