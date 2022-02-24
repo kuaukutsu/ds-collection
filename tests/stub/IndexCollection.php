@@ -6,6 +6,10 @@ namespace kuaukutsu\ds\collection\tests\stub;
 
 use kuaukutsu\ds\collection\Collection;
 
+/**
+ * @method \Traversable<Dto> getIterator()
+ * @psalm-suppress ImplementedReturnTypeMismatch
+ */
 final class IndexCollection extends Collection
 {
     public function getType(): string
@@ -16,10 +20,9 @@ final class IndexCollection extends Collection
     /**
      * @param Dto|object $item
      * @return int
-     * @psalm-suppress MixedReturnStatement
      */
     protected function indexBy(object $item): int
     {
-        return $item->id;
+        return (int)$item->id;
     }
 }

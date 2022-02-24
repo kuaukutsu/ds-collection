@@ -6,6 +6,10 @@ namespace kuaukutsu\ds\collection\tests\stub;
 
 use kuaukutsu\ds\collection\Collection;
 
+/**
+ * @method \Traversable<Dto> getIterator()
+ * @psalm-suppress ImplementedReturnTypeMismatch
+ */
 final class IndexStringCollection extends Collection
 {
     public function getType(): string

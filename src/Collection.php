@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection;
 
-use ArrayIterator;
 use Traversable;
 use Ds\Traits\GenericCollection;
 
 /**
- * Class Collection
- *
  * @see https://www.php.net/manual/class.ds-collection.php
  * @template T of object
  */
@@ -149,11 +146,15 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * @return Traversable
+     * @return Traversable<mixed, mixed>
      */
     final public function getIterator(): Traversable
     {
-        return new ArrayIterator($this->items);
+        return (function () {
+            foreach ($this->items as $key => $val) {
+                yield $key => $val;
+            }
+        })();
     }
 
     final public function toArray(): array
