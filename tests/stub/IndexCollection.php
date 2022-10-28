@@ -9,6 +9,8 @@ use kuaukutsu\ds\collection\Collection;
 /**
  * @method \Traversable<Dto> getIterator()
  * @psalm-suppress ImplementedReturnTypeMismatch
+ * @method Dto getFirst();
+ * @method Dto getLast();
  */
 final class IndexCollection extends Collection
 {

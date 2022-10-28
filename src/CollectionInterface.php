@@ -102,6 +102,20 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
     public function filter(callable $callback): self;
 
     /**
+     * @return T
+     * @throws CollectionOutOfRangeException
+     * @psalm-immutable
+     */
+    public function getFirst(): object;
+
+    /**
+     * @return T
+     * @throws CollectionOutOfRangeException
+     * @psalm-immutable
+     */
+    public function getLast(): object;
+
+    /**
      * Returns objects by index key.
      *
      * @param string|int ...$indexKey
