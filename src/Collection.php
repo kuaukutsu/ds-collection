@@ -114,7 +114,6 @@ abstract class Collection implements CollectionInterface
      * Creates a shallow copy of the collection.
      *
      * @return static a shallow copy of the collection.
-     * @psalm-suppress ImplementedReturnTypeMismatch
      * @psalm-immutable
      */
     final public function copy(): self
