@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace kuaukutsu\ds\collection;
 
 use Traversable;
-use Ds\Traits\GenericCollection;
 
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
@@ -13,17 +12,12 @@ use Ds\Traits\GenericCollection;
  */
 abstract class Collection implements CollectionInterface
 {
-    use GenericCollection;
+    use MapCollection;
 
     /**
      * @var array<string, T>
      */
     private array $items = [];
-
-    /**
-     * @var array<string, string>
-     */
-    private array $map = [];
 
     /**
      * Type object, get_class($item)
@@ -44,6 +38,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Adds an object in the storage
+     *
      * @param T|object $item The object to add.
      * @return void
      * @throws CollectionTypeException
@@ -63,6 +58,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Adds all objects from another storage
+     *
      * @param CollectionInterface $collection
      */
     final public function merge(CollectionInterface $collection): void
@@ -84,7 +80,32 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
+     * Returns whether the collection is empty.
+     *
+     * This should be equivalent to a count of zero, but is not required.
+     * Implementations should define what empty means in their own context.
+     *
+     * @return bool whether the collection is empty.
+     * @psalm-immutable
+     */
+    final public function isEmpty(): bool
+    {
+        return count($this) === 0;
+    }
+
+    /**
+     * Returns the number of objects in the storage.
+     *
+     * @return int
+     */
+    final public function count(): int
+    {
+        return count($this->items);
+    }
+
+    /**
      * Checks if the storage contains a specific object.
+     *
      * @param T|object $item
      * @return bool
      */
@@ -94,20 +115,32 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
+     * Creates a shallow copy of the collection.
+     *
+     * @return static a shallow copy of the collection.
+     * @psalm-immutable
+     */
+    final public function copy(): self
+    {
+        return clone $this;
+    }
+
+    /**
      * Filters elements of an array using a callback function.
+     *
      * @param callable(mixed):bool $callback
      * @return static
+     * @psalm-immutable
      * @example
      * ```php
      * function(object $item): bool {
      *  return get_class($item) === $this->getType();
      * }
      * ```
-     *
      */
     final public function filter(callable $callback): self
     {
-        $collection = clone $this;
+        $collection = $this->copy();
         $collection->items = array_filter($this->items, $callback);
 
         return $collection;
@@ -115,44 +148,25 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Returns objects by index key.
+     *
      * @param string|int ...$indexKey
      * @return T|object|null
+     * @psalm-immutable
      */
     final public function get(...$indexKey): ?object
     {
-        $key = $this->map[$this->buildKey($indexKey)] ?? null;
-        if ($key === null) {
-            return null;
+        if (array_key_exists($this->buildKey($indexKey), $this->map)) {
+            return $this->items[$this->map[$this->buildKey($indexKey)]] ?? null;
         }
 
-        return $this->items[$key] ?? null;
+        return null;
     }
 
-    /**
-     * Returns the number of objects in the storage.
-     * @return int
-     */
-    final public function count(): int
-    {
-        return count($this->items);
-    }
-
-    /**
-     * Removes objects from the current storage.
-     */
-    final public function clear(): void
-    {
-        $this->items = [];
-    }
-
-    /**
-     * @return Traversable<mixed, mixed>
-     */
     final public function getIterator(): Traversable
     {
         return (function () {
-            foreach ($this->items as $key => $val) {
-                yield $key => $val;
+            foreach ($this->items as $val) {
+                yield $val;
             }
         })();
     }
@@ -162,6 +176,26 @@ abstract class Collection implements CollectionInterface
         return array_values($this->items);
     }
 
+    final public function clear(): void
+    {
+        $this->items = [];
+    }
+
+    final public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    final public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
+    final public function __toString(): string
+    {
+        return 'object(' . get_class($this) . ')';
+    }
+
     /**
      * @param T|object $item
      * @return string|int|array<scalar>|null
@@ -169,47 +203,5 @@ abstract class Collection implements CollectionInterface
     protected function indexBy(object $item)
     {
         return null;
-    }
-
-    /**
-     * @param string|int|array<scalar>|null $index
-     * @param string $key
-     */
-    private function mapSet($index, string $key): void
-    {
-        if (empty($index)) {
-            return;
-        }
-
-        $this->map[$this->buildKey($index)] = $key;
-    }
-
-    /**
-     * @param string|int|array<scalar>|null $index
-     */
-    private function mapUnset($index): void
-    {
-        if (empty($index)) {
-            return;
-        }
-
-        unset($this->map[$this->buildKey($index)]);
-    }
-
-    /**
-     * @param string|int|array<scalar> $index
-     * @return string
-     */
-    private function buildKey($index): string
-    {
-        if (is_array($index)) {
-            $index = implode(':', $index);
-        }
-
-        if (is_numeric($index)) {
-            $index = (string)$index;
-        }
-
-        return ctype_alnum($index) && mb_strlen($index, '8bit') <= 32 ? $index : md5($index);
     }
 }

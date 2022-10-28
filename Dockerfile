@@ -1,4 +1,4 @@
-FROM php:7.4-cli-alpine3.13
+FROM php:7.4-cli-alpine3.16
 
 ################################
 ###    CLI BASE LAYER        ###
@@ -19,5 +19,3 @@ RUN apk update \
 # install and remove building packages
 RUN install-php-extensions \
     opcache
-
-EXPOSE 9000
