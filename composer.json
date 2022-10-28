@@ -18,7 +18,7 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
-    "phpunit/phpunit": "^9.4",
+    "phpunit/phpunit": "^9.5",
     "vimeo/psalm": "^4.1",
     "psalm/plugin-phpunit": "^0.13.0",
     "squizlabs/php_codesniffer": "*",
@@ -34,6 +34,11 @@
     "psr-4": {
       "kuaukutsu\\ds\\collection\\": "src",
       "kuaukutsu\\ds\\collection\\tests\\": "tests"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "infection/extension-installer": true
     }
   }
 }

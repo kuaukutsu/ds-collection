@@ -101,8 +101,8 @@ $dto = $collection->get(2, 'second');
 local
 
 ```shell
-docker build -t kuaukutsu/ds-collection:php .
-docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php sh
+docker build -t kuaukutsu/ds-collection .
+docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection sh
 ```
 
 ## Testing
@@ -118,7 +118,7 @@ The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 local
 
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php ./vendor/bin/phpunit 
+docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/phpunit 
 ```
 
 ### Code Sniffer
@@ -126,13 +126,13 @@ docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php 
 local
 
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php ./vendor/bin/phpcs 
+docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/phpcs 
 ```
 
 phpqa
 
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -v "$(pwd)/phpqa/tmp:/tmp" -w /app jakzal/phpqa phpcs
+docker run --init -it --rm -v "$(pwd):/app" -v "$(pwd)/phpqa/tmp:/tmp" -w /app jakzal/phpqa:php7.4 phpcs
 ```
 
 ### Static analysis
@@ -146,11 +146,11 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 local
 
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection:php ./vendor/bin/psalm 
+docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/psalm 
 ```
 
 phpqa
 
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -v "$(pwd)/phpqa/tmp:/tmp" -w /app jakzal/phpqa psalm
+docker run --init -it --rm -v "$(pwd):/app" -v "$(pwd)/phpqa/tmp:/tmp" -w /app jakzal/phpqa:php7.4 psalm
 ```
