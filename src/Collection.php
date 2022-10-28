@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace kuaukutsu\ds\collection;
 
 use Traversable;
-use Ds\Traits\GenericCollection;
 
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
@@ -108,7 +107,7 @@ abstract class Collection implements CollectionInterface
      */
     final public function filter(callable $callback): self
     {
-        $collection = clone $this;
+        $collection = $this->copy();
         $collection->items = array_filter($this->items, $callback);
 
         return $collection;
@@ -146,13 +145,13 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * @return Traversable<mixed, mixed>
+     * @return Traversable
      */
     final public function getIterator(): Traversable
     {
         return (function () {
-            foreach ($this->items as $key => $val) {
-                yield $key => $val;
+            foreach ($this->items as $val) {
+                yield $val;
             }
         })();
     }

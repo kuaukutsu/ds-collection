@@ -9,9 +9,6 @@ use Ds\Collection as PhpDsCollection;
 
 /**
  * @template T of object
- * @template-covariant TKey
- * @template-covariant TValue
- * @extends Traversable<TKey, TValue>
  */
 interface CollectionInterface extends PhpDsCollection
 {
@@ -21,11 +18,6 @@ interface CollectionInterface extends PhpDsCollection
      * @return class-string<T>
      */
     public function getType(): string;
-
-    /**
-     * @return CollectionInterface
-     */
-    public function copy(): CollectionInterface;
 
     /**
      * Adds an object in the storage.
