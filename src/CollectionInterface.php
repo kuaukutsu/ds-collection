@@ -8,6 +8,7 @@ use Ds\Collection as PhpDsCollection;
 
 /**
  * @template T of object
+ * @extends PhpDsCollection
  */
 interface CollectionInterface extends PhpDsCollection
 {
@@ -21,7 +22,7 @@ interface CollectionInterface extends PhpDsCollection
     /**
      * Adds an object in the storage.
      *
-     * @param T|object $item The object to add.
+     * @param T $item The object to add.
      * @return void
      * @throws CollectionTypeException
      */
@@ -30,14 +31,14 @@ interface CollectionInterface extends PhpDsCollection
     /**
      * Removes an object from the storage.
      *
-     * @param T|object $item
+     * @param T $item
      */
     public function detach(object $item): void;
 
     /**
      * Checks if the storage contains a specific object.
      *
-     * @param T|object $item
+     * @param T $item
      * @return bool
      */
     public function contains(object $item): bool;
@@ -66,7 +67,7 @@ interface CollectionInterface extends PhpDsCollection
     /**
      * Returns objects by index key.
      * @param string|int ...$indexKey
-     * @return T|object|null
+     * @return T|null
      */
     public function get(...$indexKey): ?object;
 }

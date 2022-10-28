@@ -10,6 +10,7 @@ use Ds\Traits\GenericCollection;
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
  * @template T of object
+ * @psalm-suppress MissingImmutableAnnotation
  */
 abstract class Collection implements CollectionInterface
 {
@@ -120,12 +121,11 @@ abstract class Collection implements CollectionInterface
      */
     final public function get(...$indexKey): ?object
     {
-        $key = $this->map[$this->buildKey($indexKey)] ?? null;
-        if ($key === null) {
-            return null;
+        if (array_key_exists($this->buildKey($indexKey), $this->map)) {
+            return $this->items[$this->map[$this->buildKey($indexKey)]] ?? null;
         }
 
-        return $this->items[$key] ?? null;
+        return null;
     }
 
     /**
@@ -177,11 +177,9 @@ abstract class Collection implements CollectionInterface
      */
     private function mapSet($index, string $key): void
     {
-        if (empty($index)) {
-            return;
+        if (empty($index) === false) {
+            $this->map[$this->buildKey($index)] = $key;
         }
-
-        $this->map[$this->buildKey($index)] = $key;
     }
 
     /**
@@ -189,11 +187,9 @@ abstract class Collection implements CollectionInterface
      */
     private function mapUnset($index): void
     {
-        if (empty($index)) {
-            return;
+        if (empty($index) === false) {
+            unset($this->map[$this->buildKey($index)]);
         }
-
-        unset($this->map[$this->buildKey($index)]);
     }
 
     /**
