@@ -151,6 +151,7 @@ abstract class Collection implements CollectionInterface
      *
      * @param string|int ...$indexKey
      * @return T|object|null
+     * @psalm-immutable
      */
     final public function get(...$indexKey): ?object
     {
@@ -161,17 +162,6 @@ abstract class Collection implements CollectionInterface
         return null;
     }
 
-    /**
-     * Removes objects from the current storage.
-     */
-    final public function clear(): void
-    {
-        $this->items = [];
-    }
-
-    /**
-     * @return Traversable
-     */
     final public function getIterator(): Traversable
     {
         return (function () {
@@ -186,35 +176,22 @@ abstract class Collection implements CollectionInterface
         return array_values($this->items);
     }
 
-    /**
-     * Returns a representation that can be natively converted to JSON, which is
-     * called when invoking json_encode.
-     *
-     * @return array
-     * @psalm-immutable
-     *
-     * @see \JsonSerializable
-     */
+    final public function clear(): void
+    {
+        $this->items = [];
+    }
+
     final public function jsonSerialize(): array
     {
         return $this->toArray();
     }
 
-    /**
-     * Invoked when calling var_dump.
-     *
-     * @return array
-     */
-    final public function __debugInfo()
+    final public function __debugInfo(): array
     {
         return $this->toArray();
     }
 
-    /**
-     * Returns a string representation of the collection, which is invoked when
-     * the collection is converted to a string.
-     */
-    final public function __toString()
+    final public function __toString(): string
     {
         return 'object(' . get_class($this) . ')';
     }

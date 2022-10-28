@@ -28,9 +28,12 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
     public function getIterator(): Traversable;
 
     /**
-     * Removes all values from the collection.
+     * Returns whether the collection is empty.
+     *
+     * This should be equivalent to a count of zero, but is not required.
+     * Implementations should define what empty means in their own context.
      */
-    public function clear(): void;
+    public function isEmpty(): bool;
 
     /**
      * Returns the size of the collection.
@@ -45,26 +48,7 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
      * @return CollectionInterface a copy of the collection.
      * @psalm-immutable
      */
-    public function copy(): CollectionInterface;
-
-    /**
-     * Returns whether the collection is empty.
-     *
-     * This should be equivalent to a count of zero, but is not required.
-     * Implementations should define what empty means in their own context.
-     */
-    public function isEmpty(): bool;
-
-    /**
-     * Returns an array representation of the collection.
-     *
-     * The format of the returned array is implementation-dependent.
-     * Some implementations may throw an exception if an array representation
-     * could not be created.
-     *
-     * @return array<T>
-     */
-    public function toArray(): array;
+    public function copy(): self;
 
     /**
      * Adds an object in the storage.
@@ -81,6 +65,11 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
      * @param T $item
      */
     public function detach(object $item): void;
+
+    /**
+     * Removes all values from the collection.
+     */
+    public function clear(): void;
 
     /**
      * Checks if the storage contains a specific object.
@@ -119,4 +108,15 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
      * @return T|null
      */
     public function get(...$indexKey): ?object;
+
+    /**
+     * Returns an array representation of the collection.
+     *
+     * The format of the returned array is implementation-dependent.
+     * Some implementations may throw an exception if an array representation
+     * could not be created.
+     *
+     * @return array<T>
+     */
+    public function toArray(): array;
 }
