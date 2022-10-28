@@ -20,6 +20,11 @@ interface CollectionInterface extends PhpDsCollection
     public function getType(): string;
 
     /**
+     * @return Traversable
+     */
+    public function getIterator(): Traversable;
+
+    /**
      * Adds an object in the storage.
      *
      * @param T $item The object to add.

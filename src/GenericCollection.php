@@ -40,6 +40,8 @@ trait GenericCollection
      *
      * @return static a shallow copy of the collection.
      * @psalm-immutable
+     * @psalm-suppress UnusedPsalmSuppress
+     * @psalm-suppress MissingImmutableAnnotation
      */
     public function copy(): self
     {
