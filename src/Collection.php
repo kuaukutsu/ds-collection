@@ -162,6 +162,34 @@ abstract class Collection implements CollectionInterface
         return null;
     }
 
+    /**
+     * @return T|object
+     * @throws CollectionOutOfRangeException
+     * @psalm-immutable
+     */
+    final public function getFirst(): object
+    {
+        if ($this->isEmpty()) {
+            throw new CollectionOutOfRangeException('Collection is empty.');
+        }
+
+        return current($this->items);
+    }
+
+    /**
+     * @return T|object
+     * @throws CollectionOutOfRangeException
+     * @psalm-immutable
+     */
+    final public function getLast(): object
+    {
+        if ($this->isEmpty()) {
+            throw new CollectionOutOfRangeException('Collection is empty.');
+        }
+
+        return end($this->items);
+    }
+
     final public function getIterator(): Traversable
     {
         return (function () {
