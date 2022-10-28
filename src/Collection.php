@@ -120,7 +120,7 @@ abstract class Collection implements CollectionInterface
      * @return static a shallow copy of the collection.
      * @psalm-immutable
      */
-    public function copy(): self
+    final public function copy(): self
     {
         return clone $this;
     }

@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection;
 
+use Countable;
 use IteratorAggregate;
+use JsonSerializable;
 use Traversable;
-use Ds\Collection as PhpDsCollection;
 
 /**
  * @template T of object
  * @extends IteratorAggregate
  */
-interface CollectionInterface extends PhpDsCollection
+interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializable
 {
     /**
      * Type object, get_class($item)
@@ -25,6 +26,45 @@ interface CollectionInterface extends PhpDsCollection
      * @return Traversable
      */
     public function getIterator(): Traversable;
+
+    /**
+     * Removes all values from the collection.
+     */
+    public function clear(): void;
+
+    /**
+     * Returns the size of the collection.
+     *
+     * @return int
+     */
+    public function count(): int;
+
+    /**
+     * Returns a shallow copy of the collection.
+     *
+     * @return CollectionInterface a copy of the collection.
+     * @psalm-immutable
+     */
+    public function copy(): CollectionInterface;
+
+    /**
+     * Returns whether the collection is empty.
+     *
+     * This should be equivalent to a count of zero, but is not required.
+     * Implementations should define what empty means in their own context.
+     */
+    public function isEmpty(): bool;
+
+    /**
+     * Returns an array representation of the collection.
+     *
+     * The format of the returned array is implementation-dependent.
+     * Some implementations may throw an exception if an array representation
+     * could not be created.
+     *
+     * @return array<T>
+     */
+    public function toArray(): array;
 
     /**
      * Adds an object in the storage.
@@ -59,6 +99,7 @@ interface CollectionInterface extends PhpDsCollection
 
     /**
      * Filters elements of an array using a callback function.
+     *
      * @param callable(mixed):bool $callback
      * @return static
      * @psalm-immutable
@@ -68,12 +109,12 @@ interface CollectionInterface extends PhpDsCollection
      *  return get_class($item) === $this->getType();
      * }
      * ```
-     *
      */
     public function filter(callable $callback): self;
 
     /**
      * Returns objects by index key.
+     *
      * @param string|int ...$indexKey
      * @return T|null
      */
