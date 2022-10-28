@@ -12,6 +12,8 @@ use Traversable;
  */
 abstract class Collection implements CollectionInterface
 {
+    use MapCollection;
+
     /**
      * @var array<string, T>
      */
@@ -118,7 +120,7 @@ abstract class Collection implements CollectionInterface
      * @return static a shallow copy of the collection.
      * @psalm-immutable
      */
-    final public function copy(): self
+    public function copy(): self
     {
         return clone $this;
     }
@@ -224,48 +226,5 @@ abstract class Collection implements CollectionInterface
     protected function indexBy(object $item)
     {
         return null;
-    }
-
-    /**
-     * @var array<string, string>
-     */
-    private array $map = [];
-
-    /**
-     * @param string|int|array<scalar>|null $index
-     * @param string $key
-     */
-    private function mapSet($index, string $key): void
-    {
-        if (empty($index) === false) {
-            $this->map[$this->buildKey($index)] = $key;
-        }
-    }
-
-    /**
-     * @param string|int|array<scalar>|null $index
-     */
-    private function mapUnset($index): void
-    {
-        if (empty($index) === false) {
-            unset($this->map[$this->buildKey($index)]);
-        }
-    }
-
-    /**
-     * @param string|int|array<scalar> $index
-     * @return string
-     */
-    private function buildKey($index): string
-    {
-        if (is_array($index)) {
-            $index = implode(':', $index);
-        }
-
-        if (is_numeric($index)) {
-            $index = (string)$index;
-        }
-
-        return ctype_alnum($index) && mb_strlen($index, '8bit') <= 32 ? $index : md5($index);
     }
 }
