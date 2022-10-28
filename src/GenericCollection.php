@@ -6,6 +6,8 @@ namespace kuaukutsu\ds\collection;
 
 /**
  * Common to structures that implement the base collection interface.
+ *
+ * @psalm-suppress UnusedPsalmSuppress
  */
 trait GenericCollection
 {
@@ -16,6 +18,8 @@ trait GenericCollection
      * Implementations should define what empty means in their own context.
      *
      * @return bool whether the collection is empty.
+     * @psalm-immutable
+     * @psalm-suppress MissingImmutableAnnotation
      */
     public function isEmpty(): bool
     {
@@ -27,6 +31,8 @@ trait GenericCollection
      * called when invoking json_encode.
      *
      * @return array
+     * @psalm-immutable
+     * @psalm-suppress MissingImmutableAnnotation
      *
      * @see \JsonSerializable
      */
@@ -40,7 +46,6 @@ trait GenericCollection
      *
      * @return static a shallow copy of the collection.
      * @psalm-immutable
-     * @psalm-suppress UnusedPsalmSuppress
      * @psalm-suppress MissingImmutableAnnotation
      */
     public function copy(): self
