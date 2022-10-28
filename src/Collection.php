@@ -9,19 +9,15 @@ use Traversable;
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
  * @template T of object
- * @psalm-suppress MissingImmutableAnnotation
  */
 abstract class Collection implements CollectionInterface
 {
+    use MapCollection;
+
     /**
      * @var array<string, T>
      */
     private array $items = [];
-
-    /**
-     * @var array<string, string>
-     */
-    private array $map = [];
 
     /**
      * Type object, get_class($item)
@@ -82,6 +78,29 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
+     * Returns whether the collection is empty.
+     *
+     * This should be equivalent to a count of zero, but is not required.
+     * Implementations should define what empty means in their own context.
+     *
+     * @return bool whether the collection is empty.
+     * @psalm-immutable
+     */
+    final public function isEmpty(): bool
+    {
+        return count($this) === 0;
+    }
+
+    /**
+     * Returns the number of objects in the storage.
+     * @return int
+     */
+    final public function count(): int
+    {
+        return count($this->items);
+    }
+
+    /**
      * Checks if the storage contains a specific object.
      * @param T|object $item
      * @return bool
@@ -92,9 +111,22 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
+     * Creates a shallow copy of the collection.
+     *
+     * @return static a shallow copy of the collection.
+     * @psalm-suppress ImplementedReturnTypeMismatch
+     * @psalm-immutable
+     */
+    final public function copy(): self
+    {
+        return clone $this;
+    }
+
+    /**
      * Filters elements of an array using a callback function.
      * @param callable(mixed):bool $callback
      * @return static
+     * @psalm-immutable
      * @example
      * ```php
      * function(object $item): bool {
@@ -126,15 +158,6 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Returns the number of objects in the storage.
-     * @return int
-     */
-    final public function count(): int
-    {
-        return count($this->items);
-    }
-
-    /**
      * Removes objects from the current storage.
      */
     final public function clear(): void
@@ -160,20 +183,6 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Returns whether the collection is empty.
-     *
-     * This should be equivalent to a count of zero, but is not required.
-     * Implementations should define what empty means in their own context.
-     *
-     * @return bool whether the collection is empty.
-     * @psalm-immutable
-     */
-    public function isEmpty(): bool
-    {
-        return count($this) === 0;
-    }
-
-    /**
      * Returns a representation that can be natively converted to JSON, which is
      * called when invoking json_encode.
      *
@@ -182,20 +191,9 @@ abstract class Collection implements CollectionInterface
      *
      * @see \JsonSerializable
      */
-    public function jsonSerialize(): array
+    final public function jsonSerialize(): array
     {
         return $this->toArray();
-    }
-
-    /**
-     * Creates a shallow copy of the collection.
-     *
-     * @return static a shallow copy of the collection.
-     * @psalm-immutable
-     */
-    public function copy(): self
-    {
-        return clone $this;
     }
 
     /**
@@ -203,7 +201,7 @@ abstract class Collection implements CollectionInterface
      *
      * @return array
      */
-    public function __debugInfo()
+    final public function __debugInfo()
     {
         return $this->toArray();
     }
@@ -212,7 +210,7 @@ abstract class Collection implements CollectionInterface
      * Returns a string representation of the collection, which is invoked when
      * the collection is converted to a string.
      */
-    public function __toString()
+    final public function __toString()
     {
         return 'object(' . get_class($this) . ')';
     }
@@ -224,43 +222,5 @@ abstract class Collection implements CollectionInterface
     protected function indexBy(object $item)
     {
         return null;
-    }
-
-    /**
-     * @param string|int|array<scalar>|null $index
-     * @param string $key
-     */
-    private function mapSet($index, string $key): void
-    {
-        if (empty($index) === false) {
-            $this->map[$this->buildKey($index)] = $key;
-        }
-    }
-
-    /**
-     * @param string|int|array<scalar>|null $index
-     */
-    private function mapUnset($index): void
-    {
-        if (empty($index) === false) {
-            unset($this->map[$this->buildKey($index)]);
-        }
-    }
-
-    /**
-     * @param string|int|array<scalar> $index
-     * @return string
-     */
-    private function buildKey($index): string
-    {
-        if (is_array($index)) {
-            $index = implode(':', $index);
-        }
-
-        if (is_numeric($index)) {
-            $index = (string)$index;
-        }
-
-        return ctype_alnum($index) && mb_strlen($index, '8bit') <= 32 ? $index : md5($index);
     }
 }

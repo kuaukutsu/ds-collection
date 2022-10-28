@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection;
 
+use IteratorAggregate;
 use Traversable;
 use Ds\Collection as PhpDsCollection;
 
 /**
  * @template T of object
+ * @extends IteratorAggregate
  */
 interface CollectionInterface extends PhpDsCollection
 {
@@ -59,6 +61,7 @@ interface CollectionInterface extends PhpDsCollection
      * Filters elements of an array using a callback function.
      * @param callable(mixed):bool $callback
      * @return static
+     * @psalm-immutable
      * @example
      * ```php
      * function(object $item): bool {
