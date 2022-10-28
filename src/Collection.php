@@ -214,12 +214,12 @@ abstract class Collection implements CollectionInterface
         return $this->toArray();
     }
 
-    final public function __debugInfo(): array
+    public function __debugInfo(): array
     {
         return $this->toArray();
     }
 
-    final public function __toString(): string
+    public function __toString(): string
     {
         return 'object(' . get_class($this) . ')';
     }
