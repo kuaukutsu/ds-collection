@@ -13,8 +13,6 @@ use Traversable;
  */
 abstract class Collection implements CollectionInterface
 {
-    use GenericCollection;
-
     /**
      * @var array<string, T>
      */
@@ -159,6 +157,64 @@ abstract class Collection implements CollectionInterface
     final public function toArray(): array
     {
         return array_values($this->items);
+    }
+
+    /**
+     * Returns whether the collection is empty.
+     *
+     * This should be equivalent to a count of zero, but is not required.
+     * Implementations should define what empty means in their own context.
+     *
+     * @return bool whether the collection is empty.
+     * @psalm-immutable
+     */
+    public function isEmpty(): bool
+    {
+        return count($this) === 0;
+    }
+
+    /**
+     * Returns a representation that can be natively converted to JSON, which is
+     * called when invoking json_encode.
+     *
+     * @return array
+     * @psalm-immutable
+     *
+     * @see \JsonSerializable
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Creates a shallow copy of the collection.
+     *
+     * @return static a shallow copy of the collection.
+     * @psalm-immutable
+     */
+    public function copy(): self
+    {
+        return clone $this;
+    }
+
+    /**
+     * Invoked when calling var_dump.
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Returns a string representation of the collection, which is invoked when
+     * the collection is converted to a string.
+     */
+    public function __toString()
+    {
+        return 'object(' . get_class($this) . ')';
     }
 
     /**
