@@ -12,8 +12,6 @@ use Traversable;
  */
 abstract class Collection implements CollectionInterface
 {
-    use MapCollection;
-
     /**
      * @var array<string, T>
      */
@@ -38,6 +36,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Adds an object in the storage
+     *
      * @param T|object $item The object to add.
      * @return void
      * @throws CollectionTypeException
@@ -57,6 +56,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Adds all objects from another storage
+     *
      * @param CollectionInterface $collection
      */
     final public function merge(CollectionInterface $collection): void
@@ -93,6 +93,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Returns the number of objects in the storage.
+     *
      * @return int
      */
     final public function count(): int
@@ -102,6 +103,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Checks if the storage contains a specific object.
+     *
      * @param T|object $item
      * @return bool
      */
@@ -123,6 +125,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Filters elements of an array using a callback function.
+     *
      * @param callable(mixed):bool $callback
      * @return static
      * @psalm-immutable
@@ -132,7 +135,6 @@ abstract class Collection implements CollectionInterface
      *  return get_class($item) === $this->getType();
      * }
      * ```
-     *
      */
     final public function filter(callable $callback): self
     {
@@ -144,6 +146,7 @@ abstract class Collection implements CollectionInterface
 
     /**
      * Returns objects by index key.
+     *
      * @param string|int ...$indexKey
      * @return T|object|null
      */
@@ -221,5 +224,48 @@ abstract class Collection implements CollectionInterface
     protected function indexBy(object $item)
     {
         return null;
+    }
+
+    /**
+     * @var array<string, string>
+     */
+    private array $map = [];
+
+    /**
+     * @param string|int|array<scalar>|null $index
+     * @param string $key
+     */
+    private function mapSet($index, string $key): void
+    {
+        if (empty($index) === false) {
+            $this->map[$this->buildKey($index)] = $key;
+        }
+    }
+
+    /**
+     * @param string|int|array<scalar>|null $index
+     */
+    private function mapUnset($index): void
+    {
+        if (empty($index) === false) {
+            unset($this->map[$this->buildKey($index)]);
+        }
+    }
+
+    /**
+     * @param string|int|array<scalar> $index
+     * @return string
+     */
+    private function buildKey($index): string
+    {
+        if (is_array($index)) {
+            $index = implode(':', $index);
+        }
+
+        if (is_numeric($index)) {
+            $index = (string)$index;
+        }
+
+        return ctype_alnum($index) && mb_strlen($index, '8bit') <= 32 ? $index : md5($index);
     }
 }
