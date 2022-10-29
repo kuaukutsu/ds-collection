@@ -7,10 +7,11 @@ namespace kuaukutsu\ds\collection\tests\stub;
 use kuaukutsu\ds\collection\Collection;
 
 /**
- * @method \Traversable<Dto> getIterator()
+ * @method iterable<Dto> getIterator()
+ * @method Dto getFirst()
+ * @method Dto getLast()
+ * @method Dto[] toArray()
  * @psalm-suppress ImplementedReturnTypeMismatch
- * @method Dto getFirst();
- * @method Dto getLast();
  */
 final class IndexCollection extends Collection
 {

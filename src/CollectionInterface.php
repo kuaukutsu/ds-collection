@@ -23,9 +23,28 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
     public function getType(): string;
 
     /**
-     * @return Traversable
+     * Adds an object in the storage.
+     *
+     * @param T $item The object to add.
+     * @return void
+     * @throws CollectionTypeException
      */
-    public function getIterator(): Traversable;
+    public function attach(object $item): void;
+
+    /**
+     * Removes an object from the storage.
+     *
+     * @param T $item
+     */
+    public function detach(object $item): void;
+
+    /**
+     * Returns a shallow copy of the collection.
+     *
+     * @return CollectionInterface a copy of the collection.
+     * @psalm-immutable
+     */
+    public function copy(): self;
 
     /**
      * Returns whether the collection is empty.
@@ -41,30 +60,6 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
      * @return int
      */
     public function count(): int;
-
-    /**
-     * Returns a shallow copy of the collection.
-     *
-     * @return CollectionInterface a copy of the collection.
-     * @psalm-immutable
-     */
-    public function copy(): self;
-
-    /**
-     * Adds an object in the storage.
-     *
-     * @param T $item The object to add.
-     * @return void
-     * @throws CollectionTypeException
-     */
-    public function attach(object $item): void;
-
-    /**
-     * Removes an object from the storage.
-     *
-     * @param T $item
-     */
-    public function detach(object $item): void;
 
     /**
      * Removes all values from the collection.
@@ -89,19 +84,15 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
     /**
      * Filters elements of an array using a callback function.
      *
-     * @param callable(mixed):bool $callback
+     * @param callable(T): bool $callback
      * @return static
      * @psalm-immutable
-     * @example
-     * ```php
-     * function(object $item): bool {
-     *  return get_class($item) === $this->getType();
-     * }
-     * ```
      */
     public function filter(callable $callback): self;
 
     /**
+     * Returns objects by first index key.
+     *
      * @return T
      * @throws CollectionOutOfRangeException
      * @psalm-immutable
@@ -109,6 +100,8 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
     public function getFirst(): object;
 
     /**
+     * Returns objects by last index key.
+     *
      * @return T
      * @throws CollectionOutOfRangeException
      * @psalm-immutable
@@ -120,8 +113,15 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
      *
      * @param string|int ...$indexKey
      * @return T|null
+     * @psalm-immutable
      */
     public function get(...$indexKey): ?object;
+
+    /**
+     * @return Traversable
+     * @psalm-immutable
+     */
+    public function getIterator(): Traversable;
 
     /**
      * Returns an array representation of the collection.
@@ -131,6 +131,7 @@ interface CollectionInterface extends IteratorAggregate, Countable, JsonSerializ
      * could not be created.
      *
      * @return array<T>
+     * @psalm-immutable
      */
     public function toArray(): array;
 }

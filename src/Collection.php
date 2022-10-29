@@ -86,7 +86,6 @@ abstract class Collection implements CollectionInterface
      * Implementations should define what empty means in their own context.
      *
      * @return bool whether the collection is empty.
-     * @psalm-immutable
      */
     final public function isEmpty(): bool
     {
@@ -128,15 +127,9 @@ abstract class Collection implements CollectionInterface
     /**
      * Filters elements of an array using a callback function.
      *
-     * @param callable(mixed):bool $callback
+     * @param callable(mixed): bool $callback
      * @return static
      * @psalm-immutable
-     * @example
-     * ```php
-     * function(object $item): bool {
-     *  return get_class($item) === $this->getType();
-     * }
-     * ```
      */
     final public function filter(callable $callback): self
     {

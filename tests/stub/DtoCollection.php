@@ -7,7 +7,7 @@ namespace kuaukutsu\ds\collection\tests\stub;
 use kuaukutsu\ds\collection\Collection;
 
 /**
- * @method \Traversable<Dto> getIterator()
+ * @method iterable<Dto> getIterator()
  * @psalm-suppress ImplementedReturnTypeMismatch
  */
 final class DtoCollection extends Collection
