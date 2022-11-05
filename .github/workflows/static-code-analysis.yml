@@ -30,10 +30,10 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install composer dependencies
-        run: composer install --dev --prefer-dist --no-progress --no-suggest
+        uses: ramsey/composer-install@v2
 
       - name: Run phpcs
-        run: phpcs
+        run: vendor/bin/phpcs
 
       - name: Psalm
         run: vendor/bin/psalm --output-format=github
