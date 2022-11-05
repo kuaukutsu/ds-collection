@@ -30,7 +30,7 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install composer dependencies
-        uses: ramsey/composer-install@v2
+        run: composer update --prefer-dist --no-progress --lock
 
       - name: Run phpcs
         run: vendor/bin/phpcs
