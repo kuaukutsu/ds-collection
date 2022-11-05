@@ -72,9 +72,7 @@ final class CollectionGetOrderTest extends TestCase
         self::assertEquals(1, $dto->id);
 
         // filter
-        $collectionNew = $collection->filter(static function (Dto $dto): bool {
-            return ($dto->id % 2) === 0;
-        });
+        $collectionNew = $collection->filter(static fn(Dto $dto): bool => ($dto->id % 2) === 0);
 
         // old collection
         $dto = $collection->getFirst();

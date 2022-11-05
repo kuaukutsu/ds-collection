@@ -111,19 +111,22 @@ docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection sh
 
 The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
-```shell
-./vendor/bin/phpunit
-```
-
-local
+docker
 
 ```shell
 docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/phpunit 
 ```
 
+phpqa
+
+```shell
+PHP_VERSION=7.4 make phpunit
+```
+
+
 ### Code Sniffer
 
-local
+docker
 
 ```shell
 docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/phpcs 
@@ -132,18 +135,14 @@ docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./ve
 phpqa
 
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -v "$(pwd)/phpqa/tmp:/tmp" -w /app jakzal/phpqa:php7.4 phpcs
+PHP_VERSION=7.4 make phpcs
 ```
 
 ### Static analysis
 
 The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
 
-```shell
-./vendor/bin/psalm
-```
-
-local
+docker
 
 ```shell
 docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/psalm 
@@ -152,5 +151,5 @@ docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./ve
 phpqa
 
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -v "$(pwd)/phpqa/tmp:/tmp" -w /app jakzal/phpqa:php7.4 psalm
+PHP_VERSION=7.4 make psalm
 ```

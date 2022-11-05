@@ -11,6 +11,11 @@
     <arg name="colors"/>
     <arg value="p"/>
 
+    <!-- Run against the PHPCompatibility ruleset -->
+    <rule ref="PHPCompatibility"/>
+    <!-- Check for cross-version support for PHP 7.4 and higher. -->
+    <config name="testVersion" value="7.4-"/>
+
     <rule ref="PSR12"/>
 
 </ruleset>
