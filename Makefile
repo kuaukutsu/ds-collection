@@ -5,12 +5,12 @@ composer:
 		composer update
 
 phpunit:
-	docker run --init -it --rm -v "$$(pwd):/app" -v "$$(pwd)/phpqa/tmp:/tmp" -w /app \
+	docker run --init -it --rm -v "$$(pwd):/app" -u $$(id -u) -v "$$(pwd)/phpqa/tmp:/tmp" -w /app \
 		jakzal/phpqa:php${PHP_VERSION} \
 		./vendor/bin/phpunit
 
 psalm:
-	docker run --init -it --rm -v "$$(pwd):/app" -v "$$(pwd)/phpqa/tmp:/tmp" -w /app \
+	docker run --init -it --rm -v "$$(pwd):/app" -u $$(id -u) -v "$$(pwd)/phpqa/tmp:/tmp" -w /app \
 		jakzal/phpqa:php${PHP_VERSION}\
 		./vendor/bin/psalm
 

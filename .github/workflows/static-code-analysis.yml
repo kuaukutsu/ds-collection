@@ -6,19 +6,34 @@ jobs:
   phpcs:
     name: static code analysis
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+
     steps:
-      - uses: actions/checkout@master
-      - name: Setup PHP with tools
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
-          tools: composer:v2, psalm, phpcs
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer:v2
         env:
           fail-fast: true
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install dependencies
+
+      - name: Install composer dependencies
         run: composer install --dev --prefer-dist --no-progress --no-suggest
+
       - name: Run phpcs
         run: phpcs
+
       - name: Psalm
         run: vendor/bin/psalm --output-format=github
