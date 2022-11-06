@@ -24,13 +24,14 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
-          tools: composer:v2
         env:
           fail-fast: true
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install composer dependencies
-        run: composer update --prefer-dist --no-progress --lock
+        uses: ramsey/composer-install@v2
+        with:
+          dependency-versions: "lowest"
 
       - name: Run phpcs
         run: vendor/bin/phpcs
