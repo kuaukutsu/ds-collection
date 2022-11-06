@@ -31,7 +31,7 @@ jobs:
       - name: Install composer dependencies
         uses: ramsey/composer-install@v2
         with:
-          dependency-versions: "lowest"
+          dependency-versions: "highest"
 
       - name: Run phpcs
         run: vendor/bin/phpcs
