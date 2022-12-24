@@ -6,7 +6,6 @@ namespace kuaukutsu\ds\collection;
 
 use Countable;
 use IteratorAggregate;
-use JsonSerializable;
 use Traversable;
 
 /**
@@ -14,7 +13,7 @@ use Traversable;
  * @template T of object
  * @template-implements IteratorAggregate<T>
  */
-abstract class Collection implements IteratorAggregate, Countable, JsonSerializable
+abstract class Collection implements IteratorAggregate, Countable
 {
     use MapCollection;
 
@@ -200,29 +199,24 @@ abstract class Collection implements IteratorAggregate, Countable, JsonSerializa
         })();
     }
 
-    final public function toArray(): array
-    {
-        return array_values($this->items);
-    }
-
     final public function clear(): void
     {
         $this->items = [];
     }
 
-    final public function jsonSerialize(): array
+    final public function toArray(): array
     {
-        return $this->toArray();
-    }
-
-    public function __debugInfo(): array
-    {
-        return $this->toArray();
+        return array_values($this->items);
     }
 
     public function __toString(): string
     {
         return 'object(' . get_class($this) . ')';
+    }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
     }
 
     /**
