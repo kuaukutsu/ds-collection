@@ -135,6 +135,7 @@ final class CollectionTest extends TestCase
     {
         $this->expectException(CollectionTypeException::class);
 
+        /** @psalm-suppress InvalidArgument exception */
         new DtoCollection(new stdClass());
     }
 
@@ -144,6 +145,7 @@ final class CollectionTest extends TestCase
 
         $this->expectException(CollectionTypeException::class);
 
+        /** @psalm-suppress InvalidArgument exception */
         $collection->attach(new stdClass());
     }
 

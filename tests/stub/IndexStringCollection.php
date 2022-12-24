@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection\tests\stub;
 
+use Traversable;
 use kuaukutsu\ds\collection\Collection;
 
 /**
- * @method \Traversable<Dto> getIterator()
- * @psalm-suppress ImplementedReturnTypeMismatch
+ * @extends Collection<Dto>
+ * @method Traversable<Dto> getIterator()
  */
 final class IndexStringCollection extends Collection
 {
@@ -21,7 +22,7 @@ final class IndexStringCollection extends Collection
      * @param Dto|object $item
      * @return string
      */
-    protected function indexBy(object $item): string
+    protected function indexBy($item): string
     {
         return (string)$item->name;
     }

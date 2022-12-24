@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection;
 
+use Countable;
+use IteratorAggregate;
+use JsonSerializable;
 use Traversable;
 
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
  * @template T of object
+ * @template-implements IteratorAggregate<T>
  */
-abstract class Collection implements CollectionInterface
+abstract class Collection implements IteratorAggregate, Countable, JsonSerializable
 {
     use MapCollection;
 
@@ -37,13 +41,13 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Adds an object in the storage
+     * Adds an object in the storage.
      *
-     * @param T|object $item The object to add.
+     * @param T $item The object to add.
      * @return void
      * @throws CollectionTypeException
      */
-    final public function attach(object $item): void
+    final public function attach($item): void
     {
         if (is_a($item, $this->getType()) === false) {
             throw new CollectionTypeException(
@@ -57,26 +61,27 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
+     * Removes an object from the storage.
+     *
+     * @param T $item
+     */
+    final public function detach($item): void
+    {
+        unset($this->items[spl_object_hash($item)]);
+        $this->mapUnset($this->indexBy($item));
+    }
+
+    /**
      * Adds all objects from another storage
      *
-     * @param CollectionInterface $collection
+     * @param static $collection
      */
-    final public function merge(CollectionInterface $collection): void
+    final public function merge(self $collection): void
     {
         /** @var T $item */
         foreach ($collection as $item) {
             $this->attach($item);
         }
-    }
-
-    /**
-     * Removes an object from the storage.
-     * @param T|object $item
-     */
-    final public function detach(object $item): void
-    {
-        unset($this->items[spl_object_hash($item)]);
-        $this->mapUnset($this->indexBy($item));
     }
 
     /**
@@ -105,10 +110,10 @@ abstract class Collection implements CollectionInterface
     /**
      * Checks if the storage contains a specific object.
      *
-     * @param T|object $item
+     * @param T $item
      * @return bool
      */
-    final public function contains(object $item): bool
+    final public function contains($item): bool
     {
         return array_key_exists(spl_object_hash($item), $this->items);
     }
@@ -143,7 +148,7 @@ abstract class Collection implements CollectionInterface
      * Returns objects by index key.
      *
      * @param string|int ...$indexKey
-     * @return T|object|null
+     * @return T|null
      * @psalm-immutable
      */
     final public function get(...$indexKey): ?object
@@ -156,7 +161,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * @return T|object
+     * @return T
      * @throws CollectionOutOfRangeException
      * @psalm-immutable
      */
@@ -170,7 +175,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * @return T|object
+     * @return T
      * @throws CollectionOutOfRangeException
      * @psalm-immutable
      */
@@ -183,6 +188,9 @@ abstract class Collection implements CollectionInterface
         return end($this->items);
     }
 
+    /**
+     * @return Traversable<T>
+     */
     final public function getIterator(): Traversable
     {
         return (function () {
@@ -218,10 +226,10 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * @param T|object $item
+     * @param T $item
      * @return string|int|array<scalar>|null
      */
-    protected function indexBy(object $item)
+    protected function indexBy($item)
     {
         return null;
     }
