@@ -14,11 +14,6 @@ phpunit:
 		jakzal/phpqa:php${PHP_VERSION} \
 		./vendor/bin/phpunit
 
-phpunit:
-	docker run --init -it --rm -v "$$(pwd):/app" -u $$(id -u) -w /app \
-		jakzal/phpqa:php${PHP_VERSION} \
-		./vendor/bin/phpunit
-
 phpcs:
 	docker run --init -it --rm -v "$$(pwd):/app" -u $$(id -u) -w /app \
 		jakzal/phpqa:php${PHP_VERSION} \
