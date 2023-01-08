@@ -23,7 +23,6 @@ final class IndexCollection extends Collection
 
     /**
      * @param Dto|object $item
-     * @return int
      */
     protected function indexBy($item): int
     {

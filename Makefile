@@ -1,4 +1,4 @@
-PHP_VERSION ?= 7.4
+PHP_VERSION ?= 8.1
 
 composer:
 	docker run --init -it --rm -v "$$(pwd):/app" -w /app composer:latest \

@@ -20,7 +20,6 @@ final class IndexStringCollection extends Collection
 
     /**
      * @param Dto|object $item
-     * @return string
      */
     protected function indexBy($item): string
     {

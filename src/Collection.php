@@ -6,6 +6,7 @@ namespace kuaukutsu\ds\collection;
 
 use Countable;
 use IteratorAggregate;
+use Stringable;
 use Traversable;
 
 /**
@@ -13,7 +14,7 @@ use Traversable;
  * @template T of object
  * @template-implements IteratorAggregate<T>
  */
-abstract class Collection implements IteratorAggregate, Countable
+abstract class Collection implements IteratorAggregate, Countable, Stringable
 {
     use MapCollection;
 
@@ -43,7 +44,6 @@ abstract class Collection implements IteratorAggregate, Countable
      * Adds an object in the storage.
      *
      * @param T $item The object to add.
-     * @return void
      * @throws CollectionTypeException
      */
     final public function attach($item): void
@@ -98,8 +98,6 @@ abstract class Collection implements IteratorAggregate, Countable
 
     /**
      * Returns the number of objects in the storage.
-     *
-     * @return int
      */
     final public function count(): int
     {
@@ -110,7 +108,6 @@ abstract class Collection implements IteratorAggregate, Countable
      * Checks if the storage contains a specific object.
      *
      * @param T $item
-     * @return bool
      */
     final public function contains($item): bool
     {
@@ -125,13 +122,16 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function copy(): self
     {
-        return clone $this;
+        $self = clone $this;
+        $self->clear();
+
+        return $self;
     }
 
     /**
      * Filters elements of an array using a callback function.
      *
-     * @param callable(mixed): bool $callback
+     * @param callable(T): bool $callback
      * @return static
      * @psalm-immutable
      */
@@ -150,13 +150,14 @@ abstract class Collection implements IteratorAggregate, Countable
      * @return T|null
      * @psalm-immutable
      */
-    final public function get(...$indexKey): ?object
+    final public function get(string|int ...$indexKey): ?object
     {
-        if (array_key_exists($this->buildKey($indexKey), $this->map)) {
-            return $this->items[$this->map[$this->buildKey($indexKey)]] ?? null;
+        $key = $this->mapExists($indexKey);
+        if ($key === null) {
+            return null;
         }
 
-        return null;
+        return $this->items[$key] ?? null;
     }
 
     /**
@@ -211,7 +212,7 @@ abstract class Collection implements IteratorAggregate, Countable
 
     public function __toString(): string
     {
-        return 'object(' . get_class($this) . ')';
+        return 'object(' . $this::class . ')';
     }
 
     public function __debugInfo(): array
@@ -222,6 +223,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * @param T $item
      * @return string|int|array<scalar>|null
+     * @noinspection PhpMissingReturnTypeInspection
      */
     protected function indexBy($item)
     {

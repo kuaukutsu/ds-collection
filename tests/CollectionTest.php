@@ -110,6 +110,8 @@ final class CollectionTest extends TestCase
 
         self::assertTrue($collection->contains($object));
 
+        self::assertCount(3, $collection);
+
         $collection->detach($object);
 
         self::assertCount(2, $collection);
