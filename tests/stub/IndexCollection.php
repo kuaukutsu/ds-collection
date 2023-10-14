@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection\tests\stub;
 
-use Traversable;
 use kuaukutsu\ds\collection\Collection;
 
 /**
  * @extends Collection<Dto>
- * @method Traversable<Dto> getIterator()
  * @method Dto getFirst()
  * @method Dto getLast()
  * @method Dto[] toArray()
@@ -22,10 +20,10 @@ final class IndexCollection extends Collection
     }
 
     /**
-     * @param Dto|object $item
+     * @param Dto $item
      */
     protected function indexBy($item): int
     {
-        return (int)$item->id;
+        return $item->id;
     }
 }
