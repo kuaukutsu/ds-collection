@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection;
 
-trait MapCollection
+trait IndexCollection
 {
     /**
      * @var array<string, string>
      */
-    private array $map = [];
+    private array $index = [];
 
     /**
      * @param string|int|array<scalar>|null $index
@@ -17,7 +17,7 @@ trait MapCollection
     private function mapSet(string|int|array|null $index, string $key): void
     {
         if (empty($index) === false) {
-            $this->map[$this->buildKey($index)] = $key;
+            $this->index[$this->buildKey($index)] = $key;
         }
     }
 
@@ -27,7 +27,7 @@ trait MapCollection
     private function mapUnset(string|int|array|null $index): void
     {
         if (empty($index) === false) {
-            unset($this->map[$this->buildKey($index)]);
+            unset($this->index[$this->buildKey($index)]);
         }
     }
 
@@ -36,7 +36,7 @@ trait MapCollection
      */
     private function mapExists(string|int|array $index): ?string
     {
-        return $this->map[$this->buildKey($index)] ?? null;
+        return $this->index[$this->buildKey($index)] ?? null;
     }
 
     /**

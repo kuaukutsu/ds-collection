@@ -25,9 +25,23 @@ $collection->attach(new Dto(2, 'second'));
 $collection->attach(new Dto(3, 'first'));
 $collection->attach(new Dto(4, 'second'));
 
-$collectionByFiltered = $collection->filter(static function (Dto $dto): bool {
-    return $dto->name === 'first'; 
-});
+$collectionByFiltered = $collection->filter(
+    static fn(Dto $dto): bool => $dto->name === 'first'
+);
+```
+
+### Сортировка
+
+```php
+$collection = new DtoCollection();
+$collection->attach(new Dto(1, 'first'));
+$collection->attach(new Dto(2, 'second'));
+$collection->attach(new Dto(3, 'first'));
+$collection->attach(new Dto(4, 'second'));
+
+$sortCollection = $collection->sort(
+    static fn(Dto $a, Dto $b): int => strcmp($a->name, $b->name)
+);
 ```
 
 ### Индексация
@@ -40,7 +54,7 @@ $collectionByFiltered = $collection->filter(static function (Dto $dto): bool {
  * @param Dto $item
  * @return int
  */
-protected function indexBy(object $item): int
+protected function indexBy($item): int
 {
     return $item->id;
 }
@@ -51,7 +65,7 @@ protected function indexBy(object $item): int
  * @param Dto $item
  * @return string
  */
-protected function indexBy(object $item): string
+protected function indexBy($item): string
 {
     return $item->name;
 }
@@ -73,12 +87,12 @@ $dto = $collection->get('second');
 
 ```php
 /**
- * @param Dto|object $item
+ * @param Dto $item
  * @return array<scalar>
  */
-protected function indexBy(object $item): array
+protected function indexBy($item): array
 {
-    return [(int)$item->id, (string)$item->name];
+    return [$item->id, $item->name];
 }
 ```
 

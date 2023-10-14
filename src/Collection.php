@@ -15,7 +15,7 @@ use Traversable;
  */
 abstract class Collection implements IteratorAggregate, Countable
 {
-    use MapCollection;
+    use IndexCollection;
 
     /**
      * @var array<string, T>
@@ -142,13 +142,31 @@ abstract class Collection implements IteratorAggregate, Countable
     }
 
     /**
+     * Sort elements of an array using a callback function.
+     *
+     * @param callable(T, T): int $callback
+     * @return static
+     * @psalm-immutable
+     */
+    final public function sort(callable $callback): self
+    {
+        $items = $this->items;
+        uasort($items, $callback);
+
+        $collection = $this->copy();
+        $collection->items = $items;
+
+        return $collection;
+    }
+
+    /**
      * Returns objects by index key.
      *
      * @param string|int ...$indexKey
      * @return T|null
      * @psalm-immutable
      */
-    final public function get(string|int ...$indexKey): ?object
+    final public function get(string | int ...$indexKey): ?object
     {
         $key = $this->mapExists($indexKey);
         if ($key === null) {
@@ -216,9 +234,8 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * @param T $item
      * @return string|int|array<scalar>|null
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    protected function indexBy($item)
+    protected function indexBy($item): array | int | string | null
     {
         return null;
     }
