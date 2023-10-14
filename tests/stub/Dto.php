@@ -6,13 +6,9 @@ namespace kuaukutsu\ds\collection\tests\stub;
 
 final class Dto
 {
-    public int $id;
-
-    public string $name;
-
-    public function __construct(int $id, string $name)
-    {
-        $this->id = $id;
-        $this->name = $name;
+    public function __construct(
+        public readonly int $id,
+        public readonly string $name,
+    ) {
     }
 }
