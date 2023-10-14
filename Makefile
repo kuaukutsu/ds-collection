@@ -8,6 +8,10 @@ composer-up:
 	docker run --init -it --rm -v "$$(pwd):/app" -w /app composer:latest \
 		composer update
 
+composer-dump:
+	docker run --init -it --rm -v "$$(pwd):/app" -w /app composer:latest \
+		composer dump-autoload
+
 psalm:
 	docker run --init -it --rm -v "$$(pwd):/app" -e XDG_CACHE_HOME=/tmp -w /app \
 		jakzal/phpqa:php${PHP_VERSION}\

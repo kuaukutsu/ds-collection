@@ -36,7 +36,11 @@
   ],
   "autoload": {
     "psr-4": {
-      "kuaukutsu\\ds\\collection\\": "src",
+      "kuaukutsu\\ds\\collection\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "kuaukutsu\\ds\\collection\\tests\\": "tests"
     }
   },
