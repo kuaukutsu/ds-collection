@@ -6,15 +6,14 @@ namespace kuaukutsu\ds\collection;
 
 use Countable;
 use IteratorAggregate;
-use Stringable;
 use Traversable;
 
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
- * @template T of object
+ * @template T
  * @template-implements IteratorAggregate<T>
  */
-abstract class Collection implements IteratorAggregate, Countable, Stringable
+abstract class Collection implements IteratorAggregate, Countable
 {
     use MapCollection;
 
@@ -73,11 +72,10 @@ abstract class Collection implements IteratorAggregate, Countable, Stringable
     /**
      * Adds all objects from another storage
      *
-     * @param static $collection
+     * @param Collection<T> $collection
      */
     final public function merge(self $collection): void
     {
-        /** @var T $item */
         foreach ($collection as $item) {
             $this->attach($item);
         }
@@ -208,11 +206,6 @@ abstract class Collection implements IteratorAggregate, Countable, Stringable
     final public function toArray(): array
     {
         return array_values($this->items);
-    }
-
-    public function __toString(): string
-    {
-        return 'object(' . static::class . ')';
     }
 
     public function __debugInfo(): array
