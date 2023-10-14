@@ -2,6 +2,10 @@ PHP_VERSION ?= 8.1
 
 composer:
 	docker run --init -it --rm -v "$$(pwd):/app" -w /app composer:latest \
+		cli composer install
+
+composer-up:
+	docker run --init -it --rm -v "$$(pwd):/app" -w /app composer:latest \
 		composer update
 
 psalm:

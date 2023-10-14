@@ -212,7 +212,7 @@ abstract class Collection implements IteratorAggregate, Countable, Stringable
 
     public function __toString(): string
     {
-        return 'object(' . $this::class . ')';
+        return 'object(' . static::class . ')';
     }
 
     public function __debugInfo(): array

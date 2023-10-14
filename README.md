@@ -105,51 +105,52 @@ docker build -t kuaukutsu/ds-collection .
 docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection sh
 ```
 
+## Docker
+
+```shell
+docker pull ghcr.io/kuaukutsu/php:8.1-cli
+```
+
+shell
+
+```shell
+docker run --init -it --rm -v "$(pwd):/app" -w /app ghcr.io/kuaukutsu/php:8.1-cli sh
+```
+
 ## Testing
 
 ### Unit testing
 
 The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
-docker
-
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/phpunit 
+make phpunit
 ```
-
-phpqa
 
 ```shell
 PHP_VERSION=7.4 make phpunit
-```
-
-
-### Code Sniffer
-
-docker
-
-```shell
-docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/phpcs 
-```
-
-phpqa
-
-```shell
-PHP_VERSION=7.4 make phpcs
 ```
 
 ### Static analysis
 
 The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
 
-docker
-
 ```shell
-docker run --init -it --rm -v "$(pwd):/app" -w /app kuaukutsu/ds-collection ./vendor/bin/psalm 
+make psalm
 ```
-
-phpqa
 
 ```shell
 PHP_VERSION=7.4 make psalm
+```
+
+### Code Sniffer
+
+```shell
+make phpcs
+```
+
+### Rector
+
+```shell
+make rector
 ```

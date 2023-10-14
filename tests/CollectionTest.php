@@ -125,7 +125,7 @@ final class CollectionTest extends TestCase
     {
         $array = [
             new Dto(1, 'first'),
-            new Dto(2, 'second')
+            new Dto(2, 'second'),
         ];
 
         $collection = new DtoCollection(...$array);
