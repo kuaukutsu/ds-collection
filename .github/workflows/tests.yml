@@ -3,7 +3,7 @@ name: PHPUnit
 on: [ pull_request ]
 
 jobs:
-  phpcs:
+  tests:
     name: unit tests
     runs-on: ubuntu-latest
 

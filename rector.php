@@ -20,7 +20,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     // define sets of rules
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_81,
         SetList::PHP_81,
+        SetList::PHP_82,
     ]);
 };
