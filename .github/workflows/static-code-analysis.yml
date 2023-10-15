@@ -3,7 +3,7 @@ name: Static code analysis
 on: [ pull_request ]
 
 jobs:
-  phpcs:
+  analysis:
     name: static code analysis
     runs-on: ubuntu-latest
 
