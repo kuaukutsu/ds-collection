@@ -14,25 +14,25 @@ composer-dump:
 
 psalm:
 	docker run --init -it --rm -v "$$(pwd):/app" -e XDG_CACHE_HOME=/tmp -w /app \
-		jakzal/phpqa:php${PHP_VERSION}\
+		ghcr.io/kuaukutsu/php:${PHP_VERSION}-cli \
 		./vendor/bin/psalm
 
 phpunit:
 	docker run --init -it --rm -v "$$(pwd):/app" -u $$(id -u) -w /app \
-		jakzal/phpqa:php${PHP_VERSION} \
+		ghcr.io/kuaukutsu/php:${PHP_VERSION}-cli \
 		./vendor/bin/phpunit
 
 phpcs:
 	docker run --init -it --rm -v "$$(pwd):/app" -u $$(id -u) -w /app \
-		jakzal/phpqa:php${PHP_VERSION} \
+		ghcr.io/kuaukutsu/php:${PHP_VERSION}-cli \
 		./vendor/bin/phpcs
 
 phpcbf:
 	docker run --init -it --rm -v "$$(pwd):/app" -u $$(id -u) -w /app \
-		jakzal/phpqa:php${PHP_VERSION} \
+		ghcr.io/kuaukutsu/php:${PHP_VERSION}-cli \
 		./vendor/bin/phpcbf
 
 rector:
 	docker run --init -it --rm -v "$$(pwd):/app" -u $$(id -u) -w /app \
-		jakzal/phpqa:php${PHP_VERSION} \
+		ghcr.io/kuaukutsu/php:${PHP_VERSION}-cli \
 		./vendor/bin/rector
