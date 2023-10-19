@@ -65,4 +65,17 @@ final class CollectionIndexingTest extends TestCase
         $dto = $collection->get(3, 'two');
         self::assertEmpty($dto);
     }
+
+    public function testCollectionRemove(): void
+    {
+        $item = new Dto(2, 'second');
+
+        $collection = new IndexCollection();
+        $collection->attach(new Dto(1, 'first'));
+        $collection->attach($item);
+        $collection->detach($item);
+
+        self::assertCount(1, $collection);
+        self::assertEmpty($collection->get(2));
+    }
 }
