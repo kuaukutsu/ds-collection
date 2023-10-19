@@ -53,7 +53,7 @@ abstract class Collection implements IteratorAggregate, Countable
             );
         }
 
-        $key = spl_object_hash($item);
+        $key = $this->generateKey($item);
         $this->items[$key] ??= $item;
         $this->mapSet($this->indexBy($item), $key);
     }
@@ -65,8 +65,9 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function detach($item): void
     {
-        unset($this->items[spl_object_hash($item)]);
-        $this->mapUnset($this->indexBy($item));
+        $key = $this->generateKey($item);
+        unset($this->items[$key]);
+        $this->mapUnset($key);
     }
 
     /**
@@ -109,7 +110,7 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function contains($item): bool
     {
-        return array_key_exists(spl_object_hash($item), $this->items);
+        return array_key_exists($this->generateKey($item), $this->items);
     }
 
     /**
@@ -168,12 +169,12 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function get(string | int ...$indexKey): ?object
     {
-        $key = $this->mapExists($indexKey);
-        if ($key === null) {
+        $key = $this->mapSearch($indexKey);
+        if ($key === null || array_key_exists($key, $this->items) === false) {
             return null;
         }
 
-        return $this->items[$key] ?? null;
+        return $this->items[$key];
     }
 
     /**
@@ -238,5 +239,13 @@ abstract class Collection implements IteratorAggregate, Countable
     protected function indexBy($item): array | int | string | null
     {
         return null;
+    }
+
+    /**
+     * @param T $item
+     */
+    private function generateKey($item): string
+    {
+        return spl_object_hash($item);
     }
 }

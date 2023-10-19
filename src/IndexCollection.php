@@ -14,27 +14,25 @@ trait IndexCollection
     /**
      * @param string|int|array<scalar>|null $index
      */
-    private function mapSet(string|int|array|null $index, string $key): void
+    private function mapSet(string | int | array | null $index, string $key): void
     {
         if (empty($index) === false) {
             $this->index[$this->buildKey($index)] = $key;
         }
     }
 
-    /**
-     * @param string|int|array<scalar>|null $index
-     */
-    private function mapUnset(string|int|array|null $index): void
+    private function mapUnset(string $key): void
     {
-        if (empty($index) === false) {
-            unset($this->index[$this->buildKey($index)]);
+        $mapKey = array_search($key, $this->index, true);
+        if ($mapKey !== false) {
+            unset($this->index[$mapKey]);
         }
     }
 
     /**
      * @param string|int|array<scalar> $index
      */
-    private function mapExists(string|int|array $index): ?string
+    private function mapSearch(string | int | array $index): ?string
     {
         return $this->index[$this->buildKey($index)] ?? null;
     }
@@ -42,7 +40,7 @@ trait IndexCollection
     /**
      * @param string|int|array<scalar> $index
      */
-    private function buildKey(string|int|array $index): string
+    private function buildKey(string | int | array $index): string
     {
         if (is_array($index)) {
             $index = implode(':', $index);
