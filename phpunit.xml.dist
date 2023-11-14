@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         stopOnFailure="false">
-    <coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" colors="true" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd" cacheDirectory=".phpunit.cache">
+    <coverage/>
+    <testsuites>
+        <testsuite name="DS Collection tests">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
         <include>
             <directory>./</directory>
         </include>
@@ -13,10 +14,5 @@
             <directory>./tests</directory>
             <directory>./vendor</directory>
         </exclude>
-    </coverage>
-    <testsuites>
-        <testsuite name="DTO tests">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
+    </source>
 </phpunit>
