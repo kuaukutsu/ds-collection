@@ -2,6 +2,10 @@
 
 Коллекция объектов.
 
+[![PHP Version Require](http://poser.pugx.org/kuaukutsu/ds-collection/require/php)](https://packagist.org/packages/kuaukutsu/ds-collection)
+[![Latest Stable Version](https://poser.pugx.org/kuaukutsu/ds-collection/v/stable)](https://packagist.org/packages/kuaukutsu/ds-collection)
+[![License](http://poser.pugx.org/kuaukutsu/ds-collection/license)](https://packagist.org/packages/kuaukutsu/ds-collection)
+
 ### Примеры
 
 ```php
