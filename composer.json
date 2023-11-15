@@ -1,7 +1,7 @@
 {
   "name": "kuaukutsu/ds-collection",
   "description": "Is the abstract layer which covers functionality the data structure Collection.",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "authors": [
     {
       "name": "Dmitriy Krivopalov",
