@@ -6,7 +6,6 @@
 [![Latest Stable Version](https://poser.pugx.org/kuaukutsu/ds-collection/v/stable)](https://packagist.org/packages/kuaukutsu/ds-collection)
 [![License](http://poser.pugx.org/kuaukutsu/ds-collection/license)](https://packagist.org/packages/kuaukutsu/ds-collection)
 [![static analysis](https://github.com/kuaukutsu/ds-collection/workflows/Static%20code%20analysis/badge.svg)](https://github.com/kuaukutsu/ds-collection/actions?query=workflow%3A%22Static+code+analysis%22)
-[![type-coverage](https://shepherd.dev/github/kuaukutsu/ds-collection/coverage.svg)](https://shepherd.dev/github/kuaukutsu/ds-collection)
 
 
 ### Примеры

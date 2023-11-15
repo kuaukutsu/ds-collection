@@ -36,4 +36,4 @@ jobs:
         run: vendor/bin/phpcs
 
       - name: Psalm
-        run: vendor/bin/psalm --shepherd --stats --output-format=github
+        run: vendor/bin/psalm --stats --output-format=github
