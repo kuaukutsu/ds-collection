@@ -7,8 +7,15 @@
 [![License](http://poser.pugx.org/kuaukutsu/ds-collection/license)](https://packagist.org/packages/kuaukutsu/ds-collection)
 [![static analysis](https://github.com/kuaukutsu/ds-collection/workflows/Static%20code%20analysis/badge.svg)](https://github.com/kuaukutsu/ds-collection/actions?query=workflow%3A%22Static+code+analysis%22)
 
+## Tech Stack
+kuaukutsu/ds-collection is built on the following main stack:
 
-### Примеры
+- [PHP](http://www.php.net/) – Languages
+- [PHPUnit](https://phpunit.de/) – Testing Frameworks
+- [GitHub Actions](https://github.com/features/actions) – Continuous Integration
+
+
+## Примеры
 
 ```php
 $collection = new DtoCollection();
