@@ -16,7 +16,7 @@ trait IndexCollection
      */
     private function mapSet(string | int | array | null $index, string $key): void
     {
-        if (empty($index) === false) {
+        if ($index !== null && $index !== '' && $index !== []) {
             $this->index[$this->buildKey($index)] = $key;
         }
     }
