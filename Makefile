@@ -6,7 +6,7 @@ composer:
 
 composer-up:
 	docker run --init -it --rm -v "$$(pwd):/app" -w /app composer:latest \
-		composer update
+		composer update --no-cache
 
 composer-dump:
 	docker run --init -it --rm -v "$$(pwd):/app" -w /app composer:latest \
