@@ -7,6 +7,9 @@ namespace kuaukutsu\ds\collection;
 use Countable;
 use IteratorAggregate;
 use Traversable;
+use kuaukutsu\ds\collection\internal\Index;
+
+use function kuaukutsu\ds\collection\internal\generateKeyForObject;
 
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
@@ -16,12 +19,12 @@ use Traversable;
  */
 abstract class Collection implements IteratorAggregate, Countable
 {
-    use IndexCollection;
-
     /**
      * @var array<string, TItem>
      */
     private array $items = [];
+
+    private Index $index;
 
     /**
      * Type object, get_class($item)
@@ -35,6 +38,8 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function __construct(object ...$items)
     {
+        $this->index = new Index();
+
         foreach ($items as $item) {
             $this->attach($item);
         }
@@ -54,9 +59,9 @@ abstract class Collection implements IteratorAggregate, Countable
             );
         }
 
-        $key = $this->generateKey($item);
+        $key = generateKeyForObject($item);
         $this->items[$key] ??= $item;
-        $this->mapSet($this->indexBy($item), $key);
+        $this->index->set($this->indexBy($item), $key);
     }
 
     /**
@@ -66,9 +71,9 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function detach(object $item): void
     {
-        $key = $this->generateKey($item);
+        $key = generateKeyForObject($item);
         unset($this->items[$key]);
-        $this->mapUnset($key);
+        $this->index->unset($this->indexBy($item));
     }
 
     /**
@@ -115,7 +120,7 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function contains(object $item): bool
     {
-        return array_key_exists($this->generateKey($item), $this->items);
+        return array_key_exists(generateKeyForObject($item), $this->items);
     }
 
     /**
@@ -156,7 +161,7 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function get(string | int ...$indexKey): ?object
     {
-        $key = $this->mapSearch($indexKey);
+        $key = $this->index->get($indexKey);
         if ($key === null || array_key_exists($key, $this->items) === false) {
             return null;
         }
@@ -207,7 +212,7 @@ abstract class Collection implements IteratorAggregate, Countable
     final public function clear(): void
     {
         $this->items = [];
-        $this->mapClear();
+        $this->index = new Index();
     }
 
     /**
@@ -226,19 +231,11 @@ abstract class Collection implements IteratorAggregate, Countable
 
     /**
      * @param TItem $item
-     * @return string|int|array<scalar>|null
+     * @return non-empty-string|int|array<scalar>|null
      * @noinspection PhpMissingParamTypeInspection
      */
     protected function indexBy($item): array | int | string | null
     {
         return null;
-    }
-
-    /**
-     * @param TItem $item
-     */
-    private function generateKey(object $item): string
-    {
-        return spl_object_hash($item);
     }
 }
