@@ -154,7 +154,7 @@ make phpunit
 ```
 
 ```shell
-PHP_VERSION=7.4 make phpunit
+PHP_VERSION=8.1 make phpunit
 ```
 
 ### Static analysis
@@ -166,7 +166,7 @@ make psalm
 ```
 
 ```shell
-PHP_VERSION=7.4 make psalm
+PHP_VERSION=8.1 make psalm
 ```
 
 ### Code Sniffer

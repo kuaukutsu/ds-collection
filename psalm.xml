@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <psalm
+        checkForThrowsDocblock="true"
         checkForThrowsInGlobalScope="true"
         ensureArrayStringOffsetsExist="true"
-        errorLevel="2"
-        findUnusedPsalmSuppress="true"
+        errorLevel="1"
         findUnusedBaselineEntry="true"
         findUnusedCode="false"
+        findUnusedPsalmSuppress="true"
+        findUnusedVariablesAndParams="true"
+        memoizeMethodCallResults="true"
         sealAllMethods="true"
+        sealAllProperties="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -16,8 +20,7 @@
     </projectFiles>
 
     <issueHandlers>
-        <MixedArrayAccess errorLevel="suppress"/>
-        <MixedArrayAssignment errorLevel="suppress"/>
-        <UncaughtThrowInGlobalScope errorLevel="info"/>
+        <MixedAssignment errorLevel="suppress"/>
+        <MissingOverrideAttribute errorLevel="suppress"/>
     </issueHandlers>
 </psalm>
