@@ -10,8 +10,8 @@ use Traversable;
 
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
- * @template T of object
- * @template-implements IteratorAggregate<T>
+ * @template TItem of object
+ * @template-implements IteratorAggregate<TItem>
  * @psalm-consistent-templates
  */
 abstract class Collection implements IteratorAggregate, Countable
@@ -19,19 +19,19 @@ abstract class Collection implements IteratorAggregate, Countable
     use IndexCollection;
 
     /**
-     * @var array<string, T>
+     * @var array<string, TItem>
      */
     private array $items = [];
 
     /**
      * Type object, get_class($item)
      *
-     * @return class-string<T>
+     * @return class-string<TItem>
      */
     abstract public function getType(): string;
 
     /**
-     * @param T ...$items
+     * @param TItem ...$items
      */
     final public function __construct(object ...$items)
     {
@@ -43,7 +43,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * Adds an object in the storage.
      *
-     * @param T $item The object to add.
+     * @param TItem $item The object to add.
      * @throws CollectionTypeException
      */
     final public function attach(object $item): void
@@ -62,7 +62,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * Removes an object from the storage.
      *
-     * @param T $item
+     * @param TItem $item
      */
     final public function detach(object $item): void
     {
@@ -74,7 +74,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * Adds all objects from another storage
      *
-     * @param Collection<T> $collection
+     * @param Collection<TItem> $collection
      * @throws CollectionTypeException
      */
     final public function merge(self $collection): void
@@ -110,7 +110,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * Checks if the storage contains a specific object.
      *
-     * @param T $item
+     * @param TItem $item
      * @psalm-immutable
      */
     final public function contains(object $item): bool
@@ -121,7 +121,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * Filters elements of an array using a callback function.
      *
-     * @param callable(T): bool $callback
+     * @param callable(TItem): bool $callback
      * @return static
      * @psalm-immutable
      */
@@ -135,7 +135,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * Sort elements of an array using a callback function.
      *
-     * @param callable(T, T): int $callback
+     * @param callable(TItem, TItem): int $callback
      * @return static
      * @psalm-immutable
      */
@@ -151,7 +151,7 @@ abstract class Collection implements IteratorAggregate, Countable
      * Returns objects by index key.
      *
      * @param string|int ...$indexKey
-     * @return T|null
+     * @return TItem|null
      * @psalm-immutable
      */
     final public function get(string | int ...$indexKey): ?object
@@ -165,7 +165,7 @@ abstract class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * @return T
+     * @return TItem
      * @throws CollectionOutOfRangeException
      * @psalm-immutable
      */
@@ -179,7 +179,7 @@ abstract class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * @return T
+     * @return TItem
      * @throws CollectionOutOfRangeException
      * @psalm-immutable
      */
@@ -193,7 +193,7 @@ abstract class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * @return Traversable<T>
+     * @return Traversable<TItem>
      */
     final public function getIterator(): Traversable
     {
@@ -211,7 +211,7 @@ abstract class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * @return list<T>
+     * @return list<TItem>
      * @psalm-immutable
      */
     final public function toArray(): array
@@ -225,7 +225,7 @@ abstract class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * @param T $item
+     * @param TItem $item
      * @return string|int|array<scalar>|null
      * @noinspection PhpMissingParamTypeInspection
      */
@@ -235,7 +235,7 @@ abstract class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * @param T $item
+     * @param TItem $item
      */
     private function generateKey(object $item): string
     {

@@ -149,7 +149,7 @@ final class CollectionTest extends TestCase
             $collection->detach($data);
         }
 
-        // assert that memory increased by less than 2kb
-        self::assertLessThan(2 * 1024, memory_get_usage() - $baseMemoryUsage);
+        // assert that memory increased by less than 1kb
+        self::assertLessThan(1024, memory_get_usage() - $baseMemoryUsage);
     }
 }
