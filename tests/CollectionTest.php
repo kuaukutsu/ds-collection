@@ -152,7 +152,10 @@ final class CollectionTest extends TestCase
     {
         $this->expectException(CollectionTypeException::class);
 
-        /** @psalm-suppress InvalidArgument exception */
+        /**
+         * @psalm-suppress InvalidArgument exception
+         * @phpstan-ignore argument.type
+         */
         new DtoCollection(new stdClass());
     }
 
@@ -162,7 +165,10 @@ final class CollectionTest extends TestCase
 
         $this->expectException(CollectionTypeException::class);
 
-        /** @psalm-suppress InvalidArgument exception */
+        /**
+         * @psalm-suppress InvalidArgument exception
+         * @phpstan-ignore argument.type
+         */
         $collection->attach(new stdClass());
     }
 
@@ -171,7 +177,7 @@ final class CollectionTest extends TestCase
         $collection = new DtoCollection();
         $baseMemoryUsage = memory_get_usage();
 
-        for ($i = 0; $i < 100; ++$i) {
+        for ($i = 0; $i < 1000; ++$i) {
             $data = new Dto(1, 'test');
             $collection->attach($data);
             $collection->detach($data);

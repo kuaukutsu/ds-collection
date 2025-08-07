@@ -50,6 +50,6 @@ trait IndexCollection
             $index = (string)$index;
         }
 
-        return ctype_alnum($index) && mb_strlen($index, '8bit') <= 32 ? $index : hash('crc32b', $index);
+        return ctype_alnum($index) && mb_strlen($index, '8bit') <= 64 ? $index : hash('xxh3', $index);
     }
 }

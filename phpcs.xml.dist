@@ -41,4 +41,6 @@
     <rule ref="SlevomatCodingStandard.PHP.ShortList"/>
     <rule ref="SlevomatCodingStandard.PHP.TypeCast"/>
     <rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
+    <!-- https://github.com/slevomat/coding-standard/blob/master/doc/whitespaces.md -->
+    <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 </ruleset>

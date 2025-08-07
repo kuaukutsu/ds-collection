@@ -10,7 +10,7 @@ use Traversable;
 
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
- * @template T
+ * @template T of object
  * @template-implements IteratorAggregate<T>
  */
 abstract class Collection implements IteratorAggregate, Countable
@@ -32,7 +32,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * @param T ...$items
      */
-    final public function __construct(...$items)
+    final public function __construct(object ...$items)
     {
         foreach ($items as $item) {
             $this->attach($item);
@@ -45,7 +45,7 @@ abstract class Collection implements IteratorAggregate, Countable
      * @param T $item The object to add.
      * @throws CollectionTypeException
      */
-    final public function attach($item): void
+    final public function attach(object $item): void
     {
         if (is_a($item, $this->getType()) === false) {
             throw new CollectionTypeException(
@@ -63,7 +63,7 @@ abstract class Collection implements IteratorAggregate, Countable
      *
      * @param T $item
      */
-    final public function detach($item): void
+    final public function detach(object $item): void
     {
         $key = $this->generateKey($item);
         unset($this->items[$key]);
@@ -74,6 +74,7 @@ abstract class Collection implements IteratorAggregate, Countable
      * Adds all objects from another storage
      *
      * @param Collection<T> $collection
+     * @throws CollectionTypeException
      */
     final public function merge(self $collection): void
     {
@@ -89,14 +90,16 @@ abstract class Collection implements IteratorAggregate, Countable
      * Implementations should define what empty means in their own context.
      *
      * @return bool whether the collection is empty.
+     * @psalm-immutable
      */
     final public function isEmpty(): bool
     {
-        return count($this) === 0;
+        return $this->items === [];
     }
 
     /**
      * Returns the number of objects in the storage.
+     * @psalm-immutable
      */
     final public function count(): int
     {
@@ -107,8 +110,9 @@ abstract class Collection implements IteratorAggregate, Countable
      * Checks if the storage contains a specific object.
      *
      * @param T $item
+     * @psalm-immutable
      */
-    final public function contains($item): bool
+    final public function contains(object $item): bool
     {
         return array_key_exists($this->generateKey($item), $this->items);
     }
@@ -184,7 +188,7 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function getFirst(): object
     {
-        if ($this->isEmpty()) {
+        if ($this->items === []) {
             throw new CollectionOutOfRangeException('Collection is empty.');
         }
 
@@ -198,11 +202,11 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function getLast(): object
     {
-        if ($this->isEmpty()) {
+        if ($this->items === []) {
             throw new CollectionOutOfRangeException('Collection is empty.');
         }
 
-        return end($this->items);
+        return $this->items[array_key_last($this->items)];
     }
 
     /**
@@ -235,6 +239,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * @param T $item
      * @return string|int|array<scalar>|null
+     * @noinspection PhpMissingParamTypeInspection
      */
     protected function indexBy($item): array | int | string | null
     {
@@ -244,7 +249,7 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * @param T $item
      */
-    private function generateKey($item): string
+    private function generateKey(object $item): string
     {
         return spl_object_hash($item);
     }

@@ -19,10 +19,7 @@ final class CollectionGetOrderTest extends TestCase
             new Dto(3, 'third'),
         );
 
-        // positive
-        $dto = $collection->getFirst();
-        self::assertNotEmpty($dto);
-        self::assertEquals(1, $dto->id);
+        self::assertEquals(1, $collection->getFirst()->id);
     }
 
     public function testLastCollection(): void
@@ -33,10 +30,7 @@ final class CollectionGetOrderTest extends TestCase
             new Dto(3, 'third'),
         );
 
-        // positive
-        $dto = $collection->getLast();
-        self::assertNotEmpty($dto);
-        self::assertEquals(3, $dto->id);
+        self::assertEquals(3, $collection->getLast()->id);
     }
 
     public function testOutOfRangeExceptionGetFirstConstruct(): void
@@ -66,22 +60,14 @@ final class CollectionGetOrderTest extends TestCase
             new Dto(4, 'fourth'),
         );
 
-        // positive
-        $dto = $collection->getFirst();
-        self::assertNotEmpty($dto);
-        self::assertEquals(1, $dto->id);
+        self::assertEquals(1, $collection->getFirst()->id);
 
         // filter
         $collectionNew = $collection->filter(static fn(Dto $dto): bool => ($dto->id % 2) === 0);
 
         // old collection
-        $dto = $collection->getFirst();
-        self::assertNotEmpty($dto);
-        self::assertEquals(1, $dto->id);
-
+        self::assertEquals(1, $collection->getFirst()->id);
         // new collection
-        $dto = $collectionNew->getFirst();
-        self::assertNotEmpty($dto);
-        self::assertEquals(2, $dto->id);
+        self::assertEquals(2, $collectionNew->getFirst()->id);
     }
 }
