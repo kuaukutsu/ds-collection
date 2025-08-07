@@ -73,8 +73,9 @@ final class CollectionIndexingTest extends TestCase
         $collection = new IndexCollection();
         $collection->attach(new Dto(1, 'first'));
         $collection->attach($item);
-        $collection->detach($item);
+        self::assertCount(2, $collection);
 
+        $collection->detach($item);
         self::assertCount(1, $collection);
         self::assertEmpty($collection->get(2));
     }

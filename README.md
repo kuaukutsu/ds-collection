@@ -113,7 +113,7 @@ protected function indexBy($item): array
 $collection = new DtoCollection();
 $collection->attach(new Dto(1, 'first'));
 $collection->attach(new Dto(2, 'second'));
-$collection->attach(new Dto(3, 'third'));
+$collection->attach(new Dto(22, 'second'));
 
 $dto = $collection->get(2, 'second');
 ```
