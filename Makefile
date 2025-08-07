@@ -14,6 +14,18 @@ check: ## detect violations of a defined coding standard and run tests
 	-make phpstan
 	-make phpunit
 
+check-83:
+	-PHP_VERSION=8.3 make phpcs
+	-PHP_VERSION=8.3 make psalm
+	-PHP_VERSION=8.3 make phpstan
+	-PHP_VERSION=8.3 make phpunit
+
+check-84:
+	-PHP_VERSION=8.4 make phpcs
+	-PHP_VERSION=8.4 make psalm
+	-PHP_VERSION=8.4 make phpstan
+	-PHP_VERSION=8.4 make phpunit
+
 auto-repair: ## automatically correct
 	-make phpcbf
 	-make rector
