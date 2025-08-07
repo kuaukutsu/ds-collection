@@ -53,7 +53,7 @@ final class CollectionIndexingTest extends TestCase
             new Dto(1, 'one'),
             new Dto(2, 'two'),
             new Dto(3, 'three'),
-            new Dto(4, 'four'),
+            new Dto(2, 'four'),
         );
 
         // positive

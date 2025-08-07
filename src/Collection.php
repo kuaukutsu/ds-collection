@@ -12,6 +12,7 @@ use Traversable;
  * @see https://www.php.net/manual/class.ds-collection.php
  * @template T of object
  * @template-implements IteratorAggregate<T>
+ * @psalm-consistent-templates
  */
 abstract class Collection implements IteratorAggregate, Countable
 {
@@ -118,20 +119,6 @@ abstract class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * Creates a shallow copy of the collection.
-     *
-     * @return static a shallow copy of the collection.
-     * @psalm-immutable
-     */
-    final public function copy(): self
-    {
-        $self = clone $this;
-        $self->clear();
-
-        return $self;
-    }
-
-    /**
      * Filters elements of an array using a callback function.
      *
      * @param callable(T): bool $callback
@@ -140,10 +127,9 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function filter(callable $callback): self
     {
-        $collection = $this->copy();
-        $collection->items = array_filter($this->items, $callback);
-
-        return $collection;
+        return new static(
+            ...array_filter($this->items, $callback)
+        );
     }
 
     /**
@@ -158,10 +144,7 @@ abstract class Collection implements IteratorAggregate, Countable
         $items = $this->items;
         uasort($items, $callback);
 
-        $collection = $this->copy();
-        $collection->items = $items;
-
-        return $collection;
+        return new static(...$items);
     }
 
     /**
@@ -224,8 +207,13 @@ abstract class Collection implements IteratorAggregate, Countable
     final public function clear(): void
     {
         $this->items = [];
+        $this->mapClear();
     }
 
+    /**
+     * @return list<T>
+     * @psalm-immutable
+     */
     final public function toArray(): array
     {
         return array_values($this->items);

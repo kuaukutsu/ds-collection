@@ -52,4 +52,9 @@ trait IndexCollection
 
         return ctype_alnum($index) && mb_strlen($index, '8bit') <= 64 ? $index : hash('xxh3', $index);
     }
+
+    private function mapClear(): void
+    {
+        $this->index = [];
+    }
 }

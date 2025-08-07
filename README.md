@@ -118,31 +118,6 @@ $collection->attach(new Dto(3, 'third'));
 $dto = $collection->get(2, 'second');
 ```
 
-## Feature
-
-- php >= 8.0
-- **WeakMap** (https://www.php.net/manual/ru/class.weakmap.php, https://sergeymukhin.com/blog/php-8-weakmaps-slabye-karty)
-
-## Docker
-
-```shell
-docker pull ghcr.io/kuaukutsu/php:8.1-cli
-```
-
-```shell
-docker pull ghcr.io/kuaukutsu/php:8.2-cli
-```
-
-Container:
-- `ghcr.io/kuaukutsu/php:${PHP_VERSION}-cli` (**default**)
-- `jakzal/phpqa:php${PHP_VERSION}`
-
-shell
-
-```shell
-docker run --init -it --rm -v "$(pwd):/app" -w /app ghcr.io/kuaukutsu/php:8.1-cli sh
-```
-
 ## Testing
 
 ### Unit testing
