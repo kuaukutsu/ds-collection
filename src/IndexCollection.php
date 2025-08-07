@@ -46,11 +46,7 @@ trait IndexCollection
             $index = implode(':', $index);
         }
 
-        if (is_numeric($index)) {
-            $index = (string)$index;
-        }
-
-        return ctype_alnum($index) && mb_strlen($index, '8bit') <= 64 ? $index : hash('xxh3', $index);
+        return hash('xxh3', (string)$index);
     }
 
     private function mapClear(): void
