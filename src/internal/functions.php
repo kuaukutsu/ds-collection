@@ -16,7 +16,7 @@ function generateKeyForObject(object $item): string
 }
 
 /**
- * @param string|int|array<scalar> $index
+ * @param non-empty-string|int|non-empty-array<scalar> $index
  * @return non-empty-string
  */
 function generateKeyForIndex(string | int | array $index): string

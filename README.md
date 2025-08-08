@@ -144,6 +144,14 @@ make psalm
 PHP_VERSION=8.1 make psalm
 ```
 
+```shell
+make phpstan
+```
+
+```shell
+PHP_VERSION=8.4 make phpstan
+```
+
 ### Code Sniffer
 
 ```shell

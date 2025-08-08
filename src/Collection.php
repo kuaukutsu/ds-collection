@@ -15,7 +15,6 @@ use function kuaukutsu\ds\collection\internal\generateKeyForObject;
  * @see https://www.php.net/manual/class.ds-collection.php
  * @template TItem of object
  * @template-implements IteratorAggregate<TItem>
- * @psalm-consistent-templates
  */
 abstract class Collection implements IteratorAggregate, Countable
 {
@@ -84,6 +83,12 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function merge(self $collection): void
     {
+        if ($this->getType() !== $collection->getType()) {
+            throw new CollectionTypeException(
+                'The collection item must be an instance of type ' . ucfirst($this->getType())
+            );
+        }
+
         foreach ($collection as $item) {
             $this->attach($item);
         }
@@ -127,13 +132,12 @@ abstract class Collection implements IteratorAggregate, Countable
      * Filters elements of an array using a callback function.
      *
      * @param callable(TItem): bool $callback
-     * @return static
      * @psalm-immutable
      */
-    final public function filter(callable $callback): self
+    final public function filter(callable $callback): static
     {
         return new static(
-            ...array_filter($this->items, $callback)
+            ...array_filter($this->toArray(), $callback)
         );
     }
 
@@ -141,12 +145,11 @@ abstract class Collection implements IteratorAggregate, Countable
      * Sort elements of an array using a callback function.
      *
      * @param callable(TItem, TItem): int $callback
-     * @return static
      * @psalm-immutable
      */
-    final public function sort(callable $callback): self
+    final public function sort(callable $callback): static
     {
-        $items = $this->items;
+        $items = $this->toArray();
         uasort($items, $callback);
 
         return new static(...$items);
@@ -161,12 +164,12 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     final public function get(string | int ...$indexKey): ?object
     {
-        $key = $this->index->get($indexKey);
-        if ($key === null || array_key_exists($key, $this->items) === false) {
+        $itemKey = $this->index->get($indexKey);
+        if ($itemKey === null) {
             return null;
         }
 
-        return $this->items[$key];
+        return $this->items[$itemKey] ?? null;
     }
 
     /**
@@ -209,12 +212,6 @@ abstract class Collection implements IteratorAggregate, Countable
         })();
     }
 
-    final public function clear(): void
-    {
-        $this->items = [];
-        $this->index = new Index();
-    }
-
     /**
      * @return list<TItem>
      * @psalm-immutable
@@ -231,7 +228,7 @@ abstract class Collection implements IteratorAggregate, Countable
 
     /**
      * @param TItem $item
-     * @return non-empty-string|int|array<scalar>|null
+     * @return string|int|array<scalar>|null
      * @noinspection PhpMissingParamTypeInspection
      */
     protected function indexBy($item): array | int | string | null
