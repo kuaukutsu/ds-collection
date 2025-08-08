@@ -2,7 +2,7 @@ name: Code label
 
 on:
   push:
-    branches: [ 'main' ]
+    branches: [ 'master' ]
 
 jobs:
   analysis:
