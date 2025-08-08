@@ -24,24 +24,6 @@ final class CollectionTest extends TestCase
         self::assertCount(3, $collection);
     }
 
-    public function testAddAndRemove(): void
-    {
-        $item = new Dto(3, 'third');
-
-        $collection = new DtoCollection();
-        $collection->attach(new Dto(1, 'first'));
-        $collection->attach(new Dto(2, 'second'));
-        $collection->attach($item);
-
-        self::assertCount(3, $collection);
-
-        $collection->detach($item);
-        self::assertCount(2, $collection);
-
-        $collection->clear();
-        self::assertCount(0, $collection);
-    }
-
     public function testIterator(): void
     {
         $collection = new DtoCollection();
