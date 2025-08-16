@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace kuaukutsu\ds\collection;
 
-use LogicException;
+use OutOfRangeException;
 
 /**
  * Exception thrown when an illegal index was requested.
  */
-final class CollectionOutOfRangeException extends LogicException
+final class CollectionOutOfRangeException extends OutOfRangeException
 {
 }
