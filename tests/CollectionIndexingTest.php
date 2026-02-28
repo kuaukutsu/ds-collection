@@ -74,6 +74,7 @@ final class CollectionIndexingTest extends TestCase
         $collection->attach(new Dto(1, 'first'));
         $collection->attach($item);
         self::assertCount(2, $collection);
+        self::assertEquals(2, $collection->get(2)?->id);
 
         $collection->detach($item);
         self::assertCount(1, $collection);

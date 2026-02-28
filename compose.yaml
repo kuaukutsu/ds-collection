@@ -1,0 +1,18 @@
+services:
+  php:
+    build:
+      context: .docker/php/cli
+      target: devel
+      args:
+        UID: ${USER:-1}
+        WORKDIR: "/app"
+        PHP_VERSION: ${PHP_VERSION:-8.3}
+    user: ${USER:-1}
+    environment:
+      INSIDE_DEVCONTAINER: true
+      HISTFILE: /app/var/.docker_history
+      COMPOSER_CACHE_DIR: /app/var/.composer_cache
+    tty: true
+    volumes:
+      - .:/app:cached
+    working_dir: /app

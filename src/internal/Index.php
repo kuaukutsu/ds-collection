@@ -26,12 +26,12 @@ final class Index
     }
 
     /**
-     * @param string|int|array<scalar> $index
+     * @param string|int|non-empty-array<scalar> $index
      * @return non-empty-string|null
      */
     public function get(string | int | array $index): ?string
     {
-        if ($index !== '' && $index !== []) {
+        if ($index !== '') {
             return $this->index[generateKeyForIndex($index)] ?? null;
         }
 
@@ -40,6 +40,7 @@ final class Index
 
     /**
      * @param string|int|array<scalar>|null $index
+     * @infection-ignore-all
      */
     public function unset(string | int | array | null $index): void
     {
@@ -47,4 +48,17 @@ final class Index
             unset($this->index[generateKeyForIndex($index)]);
         }
     }
+}
+
+/**
+ * @param non-empty-string|int|non-empty-array<scalar> $index
+ * @return non-empty-string
+ */
+function generateKeyForIndex(string | int | array $index): string
+{
+    if (is_array($index)) {
+        $index = implode(':', $index);
+    }
+
+    return hash('xxh3', (string)$index);
 }

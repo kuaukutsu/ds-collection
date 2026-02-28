@@ -6,6 +6,7 @@ namespace kuaukutsu\ds\collection\tests;
 
 use stdClass;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Group;
 use kuaukutsu\ds\collection\CollectionTypeException;
 use kuaukutsu\ds\collection\tests\stub\Dto;
 use kuaukutsu\ds\collection\tests\stub\DtoCollection;
@@ -85,6 +86,9 @@ final class CollectionTest extends TestCase
     public function testTypeExceptionCreateConstruct(): void
     {
         $this->expectException(CollectionTypeException::class);
+        $this->expectExceptionMessage(
+            'The collection item must be an instance of type kuaukutsu\ds\collection\tests\stub\Dto'
+        );
 
         /**
          * @psalm-suppress InvalidArgument exception
@@ -98,6 +102,9 @@ final class CollectionTest extends TestCase
         $collection = new DtoCollection();
 
         $this->expectException(CollectionTypeException::class);
+        $this->expectExceptionMessage(
+            'The collection item must be an instance of type kuaukutsu\ds\collection\tests\stub\Dto'
+        );
 
         /**
          * @psalm-suppress InvalidArgument exception
@@ -112,6 +119,9 @@ final class CollectionTest extends TestCase
         $collectionMerge = new StdCollection(new stdClass());
 
         $this->expectException(CollectionTypeException::class);
+        $this->expectExceptionMessage(
+            'The collection item must be an instance of type kuaukutsu\ds\collection\tests\stub\Dto'
+        );
 
         /**
          * @psalm-suppress InvalidArgument exception
@@ -120,6 +130,7 @@ final class CollectionTest extends TestCase
         $collection->merge($collectionMerge);
     }
 
+    #[Group('skip_infection')]
     public function testDoesNotLeakMemory(): void
     {
         $collection = new DtoCollection();

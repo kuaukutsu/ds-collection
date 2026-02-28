@@ -9,8 +9,6 @@ use IteratorAggregate;
 use Traversable;
 use kuaukutsu\ds\collection\internal\Index;
 
-use function kuaukutsu\ds\collection\internal\generateKeyForObject;
-
 /**
  * @see https://www.php.net/manual/class.ds-collection.php
  * @template TItem of object
@@ -23,7 +21,7 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     private array $items = [];
 
-    private Index $index;
+    private readonly Index $index;
 
     /**
      * Type object, get_class($item)
@@ -54,12 +52,12 @@ abstract class Collection implements IteratorAggregate, Countable
     {
         if (is_a($item, $this->getType()) === false) {
             throw new CollectionTypeException(
-                'The collection item must be an instance of type ' . ucfirst($this->getType())
+                'The collection item must be an instance of type ' . $this->getType()
             );
         }
 
         $key = generateKeyForObject($item);
-        $this->items[$key] ??= $item;
+        $this->items[$key] = $item;
         $this->index->set($this->indexBy($item), $key);
     }
 
@@ -71,8 +69,8 @@ abstract class Collection implements IteratorAggregate, Countable
     final public function detach(object $item): void
     {
         $key = generateKeyForObject($item);
-        unset($this->items[$key]);
         $this->index->unset($this->indexBy($item));
+        unset($this->items[$key]);
     }
 
     /**
@@ -85,7 +83,7 @@ abstract class Collection implements IteratorAggregate, Countable
     {
         if ($this->getType() !== $collection->getType()) {
             throw new CollectionTypeException(
-                'The collection item must be an instance of type ' . ucfirst($this->getType())
+                'The collection item must be an instance of type ' . $this->getType()
             );
         }
 
@@ -158,18 +156,24 @@ abstract class Collection implements IteratorAggregate, Countable
     /**
      * Returns objects by index key.
      *
-     * @param string|int ...$indexKey
+     * @param string|int|bool ...$indexKey
      * @return TItem|null
+     * @throws CollectionOutOfRangeException
      * @psalm-immutable
      */
-    final public function get(string | int ...$indexKey): ?object
+    final public function get(string | int | bool ...$indexKey): ?object
     {
+        if ($indexKey === []) {
+            throw new CollectionOutOfRangeException('Item not found in collection.');
+        }
+
         $itemKey = $this->index->get($indexKey);
         if ($itemKey === null) {
             return null;
         }
 
-        return $this->items[$itemKey] ?? null;
+        return $this->items[$itemKey]
+            ?? throw new CollectionOutOfRangeException('Item not found in collection.');
     }
 
     /**
@@ -230,9 +234,21 @@ abstract class Collection implements IteratorAggregate, Countable
      * @param TItem $item
      * @return string|int|array<scalar>|null
      * @noinspection PhpMissingParamTypeInspection
+     * @infection-ignore-all
      */
     protected function indexBy($item): array | int | string | null
     {
         return null;
     }
+}
+
+/**
+ * @return non-empty-string
+ */
+function generateKeyForObject(object $item): string
+{
+    /**
+     * @var non-empty-string
+     */
+    return spl_object_hash($item);
 }

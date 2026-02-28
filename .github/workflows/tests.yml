@@ -1,18 +1,20 @@
-name: Coverage
+name: PHPUnit
 
-on:
-  release:
-    types: [ published ]
+on: [ pull_request ]
 
 jobs:
-  coverage:
-    name: Coverage
+  tests:
+    name: unit tests
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
         php-version:
+          - "8.2"
+          - "8.3"
           - "8.4"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,16 +23,19 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          coverage: none
+          extensions: xdebug
+          coverage: xdebug
         env:
           fail-fast: true
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install composer dependencies
+      - name: Composer install dependencies
         uses: ramsey/composer-install@v3
         with:
           dependency-versions: "highest"
-          composer-options: --optimize-autoloader
+          composer-options: "--optimize-autoloader"
 
-      - name: Psalm Type Coverage
-        run: vendor/bin/psalm --stats --output-format=github --shepherd
+      - name: PHPUnit
+        run: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-clover ./coverage.xml
+        env:
+          XDEBUG_MODE: coverage
