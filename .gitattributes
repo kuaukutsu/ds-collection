@@ -1,8 +1,11 @@
-/.*                     export-ignore
-/tests/                 export-ignore
-/runtime/               export-ignore
-/*.neon                 export-ignore
-/*.xml                  export-ignore
-/*.xml.dist             export-ignore
-Makefile                export-ignore
-rector.php              export-ignore
+text=auto   eol=lf
+*.phar      binary
+*.php       diff=php
+
+* export-ignore
+/src            -export-ignore
+/src/**         -export-ignore
+/composer.json  -export-ignore
+/CHANGELOG.md   -export-ignore
+/LICENSE        -export-ignore
+/README.md      -export-ignore
