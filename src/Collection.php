@@ -21,7 +21,7 @@ abstract class Collection implements IteratorAggregate, Countable
      */
     private array $items = [];
 
-    private Index $index;
+    private readonly Index $index;
 
     /**
      * Type object, get_class($item)
